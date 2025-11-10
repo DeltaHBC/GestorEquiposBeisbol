@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Equipos de Béisbol</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">                               
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -24,13 +24,11 @@
             --lineup-cream: #fffaf0;
             --card-bg: #ffffff;
         }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
         body {
             background: var(--light-gray);
             color: var(--dark-gray);
@@ -39,7 +37,6 @@
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
         }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -50,7 +47,6 @@
             overflow: hidden;
             border: 1px solid var(--medium-gray);
         }
-        
         header {
             text-align: center;
             margin-bottom: 25px;
@@ -62,25 +58,21 @@
             overflow: hidden;
             border: 1px solid var(--secondary-blue);
         }
-        
         h1, h2, h3 {
             font-family: 'Oswald', sans-serif;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
-        
         h1 {
             font-size: clamp(1.8rem, 4vw, 2.5rem);
             margin-bottom: 10px;
             color: var(--white);
         }
-        
         header p {
             color: var(--white);
             font-size: clamp(0.9rem, 2.5vw, 1.1rem);
             opacity: 0.9;
         }
-        
         .header-icons {
             display: flex;
             justify-content: center;
@@ -88,12 +80,10 @@
             margin-top: 15px;
             flex-wrap: wrap;
         }
-        
         .header-icons i {
             font-size: clamp(1.2rem, 3vw, 1.8rem);
             color: var(--accent-gold);
         }
-        
         .step-indicator {
             display: flex;
             justify-content: center;
@@ -102,7 +92,6 @@
             flex-wrap: wrap;
             gap: 5px;
         }
-        
         .step-indicator::before {
             content: "";
             position: absolute;
@@ -113,7 +102,6 @@
             background: var(--medium-gray);
             z-index: 1;
         }
-        
         .step {
             width: 35px;
             height: 35px;
@@ -132,35 +120,28 @@
             font-family: 'Oswald', sans-serif;
             font-size: 0.9rem;
         }
-        
         .step.active {
             background: var(--accent-red);
             color: var(--white);
         }
-        
         .step.completed {
             background: var(--success-green);
             color: var(--white);
         }
-        
         .step-content {
             display: none;
             animation: fadeIn 0.4s ease;
         }
-        
         .step-content.active {
             display: block;
         }
-        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
         .form-group {
             margin-bottom: 15px;
         }
-        
         label {
             display: block;
             margin-bottom: 6px;
@@ -169,7 +150,6 @@
             font-size: 0.95rem;
             font-family: 'Oswald', sans-serif;
         }
-        
         input, select {
             width: 100%;
             padding: 10px 12px;
@@ -181,13 +161,11 @@
             color: var(--dark-gray);
             font-family: 'Roboto', sans-serif;
         }
-        
         input:focus, select:focus {
             outline: none;
             border-color: var(--primary-blue);
             box-shadow: 0 0 0 2px rgba(26, 54, 93, 0.1);
         }
-        
         .btn {
             padding: 10px 20px;
             border: none;
@@ -205,31 +183,25 @@
             letter-spacing: 0.5px;
             white-space: nowrap;
         }
-        
         .btn-primary {
             background: var(--primary-blue);
             color: white;
         }
-        
         .btn-secondary {
             background: var(--medium-gray);
             color: var(--dark-gray);
         }
-        
         .btn-success {
             background: var(--success-green);
             color: white;
         }
-        
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
         .btn:active {
             transform: translateY(0);
         }
-        
         .btn-container {
             display: flex;
             justify-content: space-between;
@@ -237,14 +209,12 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        
         .player-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 12px;
             margin-top: 15px;
         }
-        
         .player-card {
             background: var(--white);
             color: var(--dark-gray);
@@ -260,13 +230,11 @@
             font-family: 'Oswald', sans-serif;
             font-size: 0.9rem;
         }
-        
         .player-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-color: var(--primary-blue);
         }
-        
         .player-card.selected {
             background: var(--accent-gold);
             color: var(--dark-gray);
@@ -274,14 +242,11 @@
             border-color: var(--accent-red);
             animation: pulse-card 1.5s infinite;
         }
-        
         @keyframes pulse-card {
             0% { box-shadow: 0 0 0 0 rgba(214, 158, 46, 0.5); }
             70% { box-shadow: 0 0 0 10px rgba(214, 158, 46, 0); }
             100% { box-shadow: 0 0 0 0 rgba(214, 158, 46, 0); }
         }
-        
-        /* MEJORAS PARA EL APARTADO 3 - POSICIONAMIENTO EN EL CAMPO */
         .baseball-field-container {
             background: var(--light-gray);
             border-radius: 8px;
@@ -291,7 +256,6 @@
             border: 1px solid var(--medium-gray);
             overflow: hidden;
         }
-        
         .baseball-field {
             position: relative;
             width: 100%;
@@ -304,7 +268,6 @@
             overflow: hidden;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
         }
-        
         .position {
             position: absolute;
             width: clamp(40px, 12vw, 70px);
@@ -329,28 +292,23 @@
             transform: translate(-50%, -50%);
             line-height: 1.2;
         }
-        
         .position:hover {
             transform: translate(-50%, -50%) scale(1.1);
             background: #d53f3f;
         }
-        
         .position.highlight {
             animation: pulse 1.5s infinite;
             box-shadow: 0 0 0 8px rgba(214, 158, 46, 0.3);
         }
-        
         .position.assigned {
             background: var(--success-green);
             animation: bounce 0.5s ease;
         }
-        
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(214, 158, 46, 0.5); }
             70% { box-shadow: 0 0 0 12px rgba(214, 158, 46, 0); }
             100% { box-shadow: 0 0 0 0 rgba(214, 158, 46, 0); }
         }
-        
         @keyframes bounce {
             0%, 20%, 60%, 100% { transform: translate(-50%, -50%); }
             40% { transform: translate(-50%, calc(-50% - 10px)); }
@@ -363,64 +321,17 @@
             display: block;
         }
         
-        /* POSICIONES CORREGIDAS - Distribución realista del campo */
-        #pos-P {
-            top: 50%;
-            left: 50%;
-        }
-        
-        #pos-C {
-            top: 85%;
-            left: 50%;
-        }
-        
-        #pos-1B {
-            top: 60%;
-            left: 75%;
-        }
-        
-        #pos-2B {
-            top: 50%;
-            left: 65%;
-        }
-        
-        #pos-3B {
-            top: 60%;
-            left: 25%;
-        }
-        
-        #pos-SS {
-            top: 50%;
-            left: 35%;
-        }
-        
-        #pos-LF {
-            top: 30%;
-            left: 15%;
-        }
-        
-        #pos-CF {
-            top: 20%;
-            left: 50%;
-        }
-        
-        #pos-RF {
-            top: 30%;
-            left: 85%;
-        }
-        
-        /* BD en esquina inferior derecha sin interferir */
-        #pos-BD {
-            top: 90%;
-            left: 90%;
-            background: var(--accent-gold);
-            color: var(--dark-gray);
-        }
-        
-        #pos-BD.assigned {
-            background: var(--success-green);
-            color: white;
-        }
+        #pos-P { top: 50%; left: 50%; }
+        #pos-C { top: 85%; left: 50%; }
+        #pos-1B { top: 60%; left: 75%; }
+        #pos-2B { top: 50%; left: 65%; }
+        #pos-3B { top: 60%; left: 25%; }
+        #pos-SS { top: 50%; left: 35%; }
+        #pos-LF { top: 30%; left: 15%; }
+        #pos-CF { top: 20%; left: 50%; }
+        #pos-RF { top: 30%; left: 85%; }
+        #pos-BD { top: 90%; left: 90%; background: var(--accent-gold); color: var(--dark-gray); }
+        #pos-BD.assigned { background: var(--success-green); color: white; }
         
         .drag-instructions {
             text-align: center;
@@ -679,7 +590,7 @@
             background: white;
             color: black;
             padding: 20px;
-            width: 794px; /* Tamaño A4 en píxeles a 96 DPI */
+            width: 794px;
             min-height: 1123px;
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -876,7 +787,6 @@
             font-size: 0.9rem;
         }
         
-        /* Nuevos estilos para el sistema de arrastrar y soltar */
         .batting-slot.drag-over {
             background-color: var(--accent-gold);
             border: 2px dashed var(--accent-red);
@@ -916,196 +826,161 @@
             border-left: 4px solid var(--accent-gold);
         }
         
-        /* Estilos para impresión */
         @media print {
-            body {
-                background: white;
-                padding: 0;
-                margin: 0;
-            }
-            
-            .container {
-                box-shadow: none;
-                border: none;
-                padding: 0;
-                margin: 0;
-                width: 100%;
-            }
-            
-            header, .step-indicator, .btn-container, .contact-section, .floating-btn, .notification {
-                display: none !important;
-            }
-            
-            .step-content {
-                display: block !important;
-            }
-            
-            .pdf-preview-container {
-                border: none;
-                padding: 0;
-                margin: 0;
-                width: 100%;
-                overflow: visible;
-            }
-            
-            .pdf-preview {
-                box-shadow: none;
-                border: none;
-                padding: 0;
-                margin: 0;
-                width: 100%;
-                min-height: auto;
-            }
+            body { background: white; padding: 0; margin: 0; }
+            .container { box-shadow: none; border: none; padding: 0; margin: 0; width: 100%; }
+            header, .step-indicator, .btn-container, .contact-section, .floating-btn, .notification { display: none !important; }
+            .step-content { display: block !important; }
+            .pdf-preview-container { border: none; padding: 0; margin: 0; width: 100%; overflow: visible; }
+            .pdf-preview { box-shadow: none; border: none; padding: 0; margin: 0; width: 100%; min-height: auto; }
         }
         
         @media (min-width: 576px) {
-            .player-list {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            }
-            
-            .batting-order, .bench-lineup-container {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            }
-            
-            .assign-buttons {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .player-list { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+            .batting-order, .bench-lineup-container { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+            .assign-buttons { grid-template-columns: repeat(2, 1fr); }
         }
         
         @media (min-width: 768px) {
-            body {
-                padding: 20px;
-            }
-            
-            .container {
-                padding: 25px;
-            }
-            
-            .player-management {
-                flex-direction: row;
-            }
-            
-            .lineup-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .pdf-lineup {
-                grid-template-columns: 1fr;
-            }
-            
-            .step-indicator::before {
-                left: 10%;
-                right: 10%;
-            }
-            
-            .step {
-                width: 40px;
-                height: 40px;
-                margin: 0 15px;
-                font-size: 1rem;
-            }
+            body { padding: 20px; }
+            .container { padding: 25px; }
+            .player-management { flex-direction: row; }
+            .lineup-grid { grid-template-columns: 1fr 1fr; }
+            .pdf-lineup { grid-template-columns: 1fr; }
+            .step-indicator::before { left: 10%; right: 10%; }
+            .step { width: 40px; height: 40px; margin: 0 15px; font-size: 1rem; }
         }
         
         @media (min-width: 992px) {
-            .player-list {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            }
-            
-            .batting-order, .bench-lineup-container {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            }
+            .player-list { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+            .batting-order, .bench-lineup-container { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
         }
         
         @media (max-width: 575px) {
-            .header-icons {
-                gap: 10px;
-            }
-            
-            .step-indicator::before {
-                display: none;
-            }
-            
-            .step {
-                margin: 0 5px;
-            }
-            
-            .btn {
-                padding: 8px 16px;
-                font-size: 0.9rem;
-            }
-            
-            .contact-info {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .contact-item {
-                width: 100%;
-                max-width: 300px;
-                justify-content: center;
-            }
-            
-            .pdf-preview {
-                width: 100%;
-                min-width: 794px;
-            }
-            
-            .position {
-                width: clamp(45px, 18vw, 70px);
-                height: clamp(45px, 18vw, 70px);
-                font-size: clamp(0.5rem, 3vw, 0.8rem);
-            }
-            
-            /* Mejoras específicas para móviles en el apartado 3 */
-            .player-management {
-                flex-direction: column;
-            }
-            
-            .quick-assign {
-                order: -1;
-            }
-            
-            .player-input-section {
-                order: 1;
-            }
+            .header-icons { gap: 10px; }
+            .step-indicator::before { display: none; }
+            .step { margin: 0 5px; }
+            .btn { padding: 8px 16px; font-size: 0.9rem; }
+            .contact-info { flex-direction: column; align-items: center; }
+            .contact-item { width: 100%; max-width: 300px; justify-content: center; }
+            .pdf-preview { width: 100%; min-width: 794px; }
+            .position { width: clamp(45px, 18vw, 70px); height: clamp(45px, 18vw, 70px); font-size: clamp(0.5rem, 3vw, 0.8rem); }
+            .player-management { flex-direction: column; }
+            .quick-assign { order: -1; }
+            .player-input-section { order: 1; }
         }
         
-        /* Mejoras específicas para pantallas muy pequeñas */
         @media (max-width: 400px) {
-            .baseball-field {
-                height: 250px;
-            }
-            
-            .position {
-                width: 35px;
-                height: 35px;
-                font-size: 0.5rem;
-            }
-            
-            .position small {
-                font-size: 0.4rem;
-            }
-            
-            /* Ajustes finos de posiciones para móvil */
-            #pos-P { top: 50%; left: 50%; }
-            #pos-C { top: 85%; left: 50%; }
-            #pos-1B { top: 60%; left: 75%; }
-            #pos-2B { top: 50%; left: 65%; }
-            #pos-3B { top: 60%; left: 25%; }
-            #pos-SS { top: 50%; left: 35%; }
-            #pos-LF { top: 30%; left: 15%; }
-            #pos-CF { top: 20%; left: 50%; }
-            #pos-RF { top: 30%; left: 85%; }
-            #pos-BD { top: 90%; left: 90%; }
+            .baseball-field { height: 250px; }
+            .position { width: 35px; height: 35px; font-size: 0.5rem; }
+            .position small { font-size: 0.4rem; }
         }
         
-        /* Ajustes para tablets */
         @media (min-width: 768px) and (max-width: 1024px) {
-            .position {
-                width: clamp(50px, 8vw, 65px);
-                height: clamp(50px, 8vw, 65px);
-                font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+            .position { width: clamp(50px, 8vw, 65px); height: clamp(50px, 8vw, 65px); font-size: clamp(0.6rem, 1.5vw, 0.75rem); }
+        }
+        
+        .touch-drag-info {
+            display: none;
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .touch-drag-info { display: block; }
+            .batting-slot { touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+            .player-item { touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+        }
+        
+        .mobile-drag-handle {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-drag-handle {
+                display: block;
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                color: var(--dark-gray);
+                font-size: 0.8rem;
             }
+            
+            .batting-slot {
+                position: relative;
+                padding-right: 25px;
+            }
+        }
+        
+        .bench-restriction-info {
+            background: var(--light-gray);
+            border-left: 4px solid var(--accent-red);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        .bench-player.draggable {
+            cursor: grab;
+            transition: all 0.2s ease;
+        }
+        
+        .bench-player.draggable:active {
+            cursor: grabbing;
+        }
+        
+        .bench-player.draggable:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .bench-player.draggable {
+                cursor: grab;
+                touch-action: manipulation;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+            
+            .bench-player.draggable:active {
+                cursor: grabbing;
+            }
+            
+            .mobile-drag-info {
+                display: block;
+                background: var(--accent-gold);
+                color: var(--primary-blue);
+                padding: 10px;
+                border-radius: 6px;
+                margin: 10px 0;
+                text-align: center;
+                font-weight: bold;
+            }
+        }
+        
+        /* Nuevos estilos para el intercambio bidireccional */
+        .batting-slot.draggable {
+            cursor: grab;
+        }
+        
+        .batting-slot.draggable:active {
+            cursor: grabbing;
+        }
+        
+        .bench-slot.drag-over {
+            background-color: var(--accent-gold);
+            border: 2px dashed var(--accent-red);
+        }
+        
+        .slot-player {
+            min-height: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -1150,10 +1025,8 @@
                 <label for="category"><i class="fas fa-tag"></i> Categoría</label>
                 <select id="category">
                     <option value="">Selecciona una categoría</option>
-                    <option value="Infantil">Infantil</option>
-                    <option value="Juvenil">Juvenil</option>
-                    <option value="Adultos">Adultos</option>
-                    <option value="Profesional">Profesional</option>
+                    <option value="Lineup Profesional">Lineup Profesional</option>
+                    <option value="Lineup Infantil">Lineup Infantil</option>
                 </select>
                 <div class="error-message" id="categoryError">Debes seleccionar una categoría</div>
             </div>
@@ -1247,8 +1120,12 @@
             </div>
             <p>Organiza el orden de bateo y los jugadores de reserva:</p>
             
+            <div class="touch-drag-info">
+                <i class="fas fa-hand-pointer"></i> <strong>Instrucciones para móvil:</strong> Mantén presionado un jugador y arrástralo para reorganizar el orden de bateo.
+            </div>
+            
             <div class="drag-info">
-                <i class="fas fa-info-circle"></i> <strong>Instrucciones:</strong> Arrastra y suelta los jugadores del orden de bateo para reorganizarlos. Los jugadores de banca no pueden entrar al orden de bateo.
+                <i class="fas fa-info-circle"></i> <strong>Instrucciones:</strong> Arrastra y suelta los jugadores entre el orden de bateo y la banca para reorganizarlos.
             </div>
             
             <div class="lineup-container">
@@ -1289,7 +1166,7 @@
                     </div>
                 </div>
                 
-                <div class="bench-lineup">
+                <div class="bench-lineup" id="benchLineupSection">
                     <h3 class="bench-lineup-title">JUGADORES DE RESERVA</h3>
                     <div class="bench-lineup-container" id="benchLineup">
                        
@@ -1368,7 +1245,6 @@
         };
         
         let selectedPlayer = null;
-        let selectedPlayerForLineup = null;
         
         // Posiciones mejoradas para el campo - distribución realista
         const fieldPositions = [
@@ -1415,6 +1291,11 @@
             field.innerHTML = '';
             
             fieldPositions.forEach(pos => {
+                // Si es categoría infantil, ocultar la posición BD
+                if (teamData.category === "Lineup Infantil" && pos.id === "BD") {
+                    return;
+                }
+                
                 const positionEl = document.createElement('div');
                 positionEl.className = 'position';
                 positionEl.id = `pos-${pos.id}`;
@@ -1507,7 +1388,10 @@
             
             const playerCards = document.querySelectorAll('.player-card');
             
-            for (let i = 0; i < Math.min(9, playerCards.length); i++) {
+            // Para lineup infantil, asignar solo 9 posiciones (sin BD)
+            const positionsToAssign = teamData.category === "Lineup Infantil" ? 9 : 10;
+            
+            for (let i = 0; i < Math.min(positionsToAssign, playerCards.length); i++) {
                 const playerCard = playerCards[i];
                 const positionEl = document.getElementById(`pos-${fieldPositions[i].id}`);
                 
@@ -1577,6 +1461,7 @@
             
             if (step === 3) {
                 generatePlayerCards();
+                generateFieldPositions(); // Regenerar el campo para mostrar/ocultar BD según la categoría
             }
             
             if (step === 4) {
@@ -1693,14 +1578,17 @@
         }
         
         function validateStep3() {
+            // Para lineup infantil, solo se requieren 9 posiciones (sin BD)
+            const requiredPositions = teamData.category === "Lineup Infantil" ? 9 : 10;
             const assignedPositions = Object.keys(teamData.positions).length;
             
-            if (assignedPositions < 10) {
-                alert(`Por favor, asigna jugadores a todas las posiciones principales y al Bateador Designado (BD). Faltan ${10 - assignedPositions} posiciones.`);
+            if (assignedPositions < requiredPositions) {
+                alert(`Por favor, asigna jugadores a todas las posiciones principales. Faltan ${requiredPositions - assignedPositions} posiciones.`);
                 return false;
             }
             
-            if (!teamData.positions["BD"]) {
+            // Solo validar BD para lineup profesional
+            if (teamData.category === "Lineup Profesional" && !teamData.positions["BD"]) {
                 alert('Debes asignar un jugador al Bateador Designado (BD) antes de continuar.');
                 return false;
             }
@@ -1709,9 +1597,18 @@
         }
         
         function validateStep4() {
-            if (teamData.battingOrder.filter(p => p !== null).length < 10) {
-                alert('Debes asignar al menos 10 jugadores al orden de bateo (incluyendo el Pitcher).');
-                return false;
+            // Para lineup infantil, todos los jugadores deben estar en el orden de bateo
+            if (teamData.category === "Lineup Infantil") {
+                if (teamData.battingOrder.filter(p => p !== null).length !== teamData.players.length) {
+                    alert('En Lineup Infantil, todos los jugadores deben estar en el orden de bateo.');
+                    return false;
+                }
+            } else {
+                // Para lineup profesional, al menos 10 jugadores
+                if (teamData.battingOrder.filter(p => p !== null).length < 10) {
+                    alert('Debes asignar al menos 10 jugadores al orden de bateo (incluyendo el Pitcher).');
+                    return false;
+                }
             }
             
             return true;
@@ -1743,101 +1640,159 @@
             const battingOrder = document.getElementById('battingOrder');
             battingOrder.innerHTML = '';
             
-            // Inicializar el orden de bateo con los jugadores del campo
-            teamData.battingOrder = [];
-            
-            // Agregar los 9 jugadores de campo (excluyendo P)
-            const fieldPlayers = [];
-            fieldPositions.forEach(pos => {
-                if (pos.id !== "P" && teamData.positions[pos.id]) {
-                    fieldPlayers.push({
-                        position: pos.id,
-                        player: teamData.positions[pos.id],
-                        number: pos.name.match(/\d+/)?.[0] || "BD"
-                    });
-                }
-            });
-            
-            // Ordenar por número de posición (1-9)
-            fieldPlayers.sort((a, b) => parseInt(a.number) - parseInt(b.number));
-            
-            // Agregar los jugadores al orden de bateo
-            for (let i = 0; i < 9; i++) {
-                const playerData = fieldPlayers[i];
-                teamData.battingOrder[i] = playerData ? playerData.player : null;
-            }
-            
-            // Agregar el pitcher en la posición P
-            teamData.battingOrder[9] = teamData.positions["P"] || null;
-            
-            // Generar las casillas del orden de bateo (10 posiciones incluyendo P)
-            for (let i = 0; i < 10; i++) {
-                const slot = document.createElement('div');
-                slot.className = 'batting-slot';
-                slot.id = `batting-slot-${i}`;
-                slot.setAttribute('data-slot', i);
+            // Para lineup infantil: TODOS los jugadores van al orden de bateo
+            if (teamData.category === "Lineup Infantil") {
+                teamData.battingOrder = [...teamData.players];
                 
-                const playerName = teamData.battingOrder[i];
-                const slotNumber = battingOrderNumbers[i];
-                
-                // Obtener la posición del jugador
-                let playerPosition = "";
-                if (playerName) {
-                    for (const [pos, name] of Object.entries(teamData.positions)) {
-                        if (name === playerName) {
-                            playerPosition = pos;
-                            break;
+                // Mostrar todos los jugadores en el orden de bateo
+                for (let i = 0; i < teamData.players.length; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'batting-slot';
+                    slot.id = `batting-slot-${i}`;
+                    slot.setAttribute('data-slot', i);
+                    
+                    const playerName = teamData.battingOrder[i];
+                    const slotNumber = i < 9 ? (i + 1).toString() : (i === 9 ? "P" : (i + 1).toString());
+                    
+                    // Obtener la posición del jugador
+                    let playerPosition = "-"; // Por defecto "-" para jugadores sin posición
+                    if (playerName) {
+                        for (const [pos, name] of Object.entries(teamData.positions)) {
+                            if (name === playerName) {
+                                playerPosition = pos;
+                                break;
+                            }
                         }
                     }
-                }
-                
-                slot.innerHTML = `
-                    <div class="slot-number">${slotNumber}</div>
-                    <div class="slot-player" id="slot-player-${i}">
-                        ${playerName ? `${playerName} (${playerPosition})` : '- Vacío -'}
-                    </div>
-                `;
-                
-                if (slotNumber === "P") {
-                    slot.style.backgroundColor = "#f0f8ff"; 
-                    slot.style.cursor = "not-allowed";
-                } else {
+                    
+                    slot.innerHTML = `
+                        <div class="slot-number">${slotNumber}</div>
+                        <div class="slot-player" id="slot-player-${i}">
+                            ${playerName ? `${playerName} (${playerPosition})` : '- Vacío -'}
+                        </div>
+                        <div class="mobile-drag-handle"><i class="fas fa-grip-lines"></i></div>
+                    `;
+                    
                     // Hacer que las casillas del orden de bateo sean arrastrables
                     slot.setAttribute('draggable', 'true');
                     slot.classList.add('draggable');
+                    
+                    battingOrder.appendChild(slot);
+                    
+                    // Configurar eventos de arrastrar y soltar
+                    setupDragAndDrop(slot);
                 }
                 
-                battingOrder.appendChild(slot);
+                // Ocultar la sección de banca para lineup infantil
+                document.getElementById('benchLineupSection').style.display = 'none';
                 
-                // Configurar eventos de arrastrar y soltar
-                setupDragAndDrop(slot);
+            } else {
+                // Para lineup profesional: comportamiento normal
+                
+                // Inicializar el orden de bateo con los jugadores del campo
+                teamData.battingOrder = [];
+                
+                // Agregar los 9 jugadores de campo (excluyendo P)
+                const fieldPlayers = [];
+                fieldPositions.forEach(pos => {
+                    if (pos.id !== "P" && teamData.positions[pos.id]) {
+                        fieldPlayers.push({
+                            position: pos.id,
+                            player: teamData.positions[pos.id],
+                            number: pos.name.match(/\d+/)?.[0] || "BD"
+                        });
+                    }
+                });
+                
+                // Ordenar por número de posición (1-9)
+                fieldPlayers.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+                
+                // Agregar los jugadores al orden de bateo
+                for (let i = 0; i < 9; i++) {
+                    const playerData = fieldPlayers[i];
+                    teamData.battingOrder[i] = playerData ? playerData.player : null;
+                }
+                
+                // Agregar el pitcher en la posición P
+                teamData.battingOrder[9] = teamData.positions["P"] || null;
+                
+                // Generar las casillas del orden de bateo (10 posiciones incluyendo P)
+                for (let i = 0; i < 10; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'batting-slot';
+                    slot.id = `batting-slot-${i}`;
+                    slot.setAttribute('data-slot', i);
+                    
+                    const playerName = teamData.battingOrder[i];
+                    const slotNumber = battingOrderNumbers[i];
+                    
+                    // Obtener la posición del jugador
+                    let playerPosition = "";
+                    if (playerName) {
+                        for (const [pos, name] of Object.entries(teamData.positions)) {
+                            if (name === playerName) {
+                                playerPosition = pos;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    slot.innerHTML = `
+                        <div class="slot-number">${slotNumber}</div>
+                        <div class="slot-player" id="slot-player-${i}">
+                            ${playerName ? `${playerName} (${playerPosition})` : '- Vacío -'}
+                        </div>
+                        <div class="mobile-drag-handle"><i class="fas fa-grip-lines"></i></div>
+                    `;
+                    
+                    if (slotNumber === "P") {
+                        slot.style.backgroundColor = "#f0f8ff"; 
+                        slot.style.cursor = "not-allowed";
+                    } else {
+                        // Hacer que las casillas del orden de bateo sean arrastrables
+                        slot.setAttribute('draggable', 'true');
+                        slot.classList.add('draggable');
+                    }
+                    
+                    battingOrder.appendChild(slot);
+                    
+                    // Configurar eventos de arrastrar y soltar
+                    setupDragAndDrop(slot);
+                }
+                
+                // Mostrar la sección de banca para lineup profesional
+                document.getElementById('benchLineupSection').style.display = 'block';
+                
+                // Generar jugadores de reserva
+                const benchLineup = document.getElementById('benchLineup');
+                benchLineup.innerHTML = '';
+                
+                // Obtener jugadores no asignados a posiciones
+                const assignedPlayers = Object.values(teamData.positions);
+                const availablePlayers = teamData.players.filter(player => 
+                    !assignedPlayers.includes(player)
+                );
+                
+                teamData.benchLineup = [...availablePlayers];
+                
+                availablePlayers.forEach((player, index) => {
+                    const benchSlot = document.createElement('div');
+                    benchSlot.className = 'bench-slot';
+                    benchSlot.id = `bench-slot-${index}`;
+                    
+                    const playerItem = document.createElement('div');
+                    playerItem.className = 'player-item draggable';
+                    playerItem.textContent = player;
+                    playerItem.setAttribute('data-player', player);
+                    playerItem.setAttribute('draggable', 'true');
+                    
+                    benchSlot.appendChild(playerItem);
+                    benchLineup.appendChild(benchSlot);
+                    
+                    // Configurar eventos de arrastrar y soltar para jugadores de banca
+                    setupBenchDragAndDrop(playerItem);
+                });
             }
-            
-            // Generar jugadores de reserva
-            const benchLineup = document.getElementById('benchLineup');
-            benchLineup.innerHTML = '';
-            
-            // Obtener jugadores no asignados a posiciones
-            const assignedPlayers = Object.values(teamData.positions);
-            const availablePlayers = teamData.players.filter(player => 
-                !assignedPlayers.includes(player)
-            );
-            
-            teamData.benchLineup = [...availablePlayers];
-            
-            availablePlayers.forEach((player, index) => {
-                const benchSlot = document.createElement('div');
-                benchSlot.className = 'bench-slot';
-                benchSlot.id = `bench-slot-${index}`;
-                
-                const playerItem = document.createElement('div');
-                playerItem.className = 'player-item non-draggable';
-                playerItem.textContent = player;
-                playerItem.setAttribute('data-player', player);
-                benchSlot.appendChild(playerItem);
-                
-                benchLineup.appendChild(benchSlot);
-            });
         }
         
         function setupDragAndDrop(element) {
@@ -1850,11 +1805,15 @@
                 
                 this.classList.add('dragging');
                 e.dataTransfer.setData('text/plain', this.id);
+                e.dataTransfer.setData('type', 'batting-slot');
             });
             
             element.addEventListener('dragend', function() {
                 this.classList.remove('dragging');
                 document.querySelectorAll('.batting-slot').forEach(slot => {
+                    slot.classList.remove('drag-over');
+                });
+                document.querySelectorAll('.bench-slot').forEach(slot => {
                     slot.classList.remove('drag-over');
                 });
             });
@@ -1883,61 +1842,105 @@
                 
                 const draggedId = e.dataTransfer.getData('text/plain');
                 const draggedElement = document.getElementById(draggedId);
+                const dragType = e.dataTransfer.getData('type');
                 
                 if (draggedElement && draggedElement !== this) {
-                    // Intercambiar los jugadores en el orden de bateo
-                    const fromSlot = parseInt(draggedElement.getAttribute('data-slot'));
-                    const toSlot = parseInt(this.getAttribute('data-slot'));
-                    
-                    const tempPlayer = teamData.battingOrder[fromSlot];
-                    teamData.battingOrder[fromSlot] = teamData.battingOrder[toSlot];
-                    teamData.battingOrder[toSlot] = tempPlayer;
-                    
-                    // Obtener las posiciones de los jugadores
-                    let fromPlayerPosition = "";
-                    let toPlayerPosition = "";
-                    
-                    if (teamData.battingOrder[fromSlot]) {
-                        for (const [pos, name] of Object.entries(teamData.positions)) {
-                            if (name === teamData.battingOrder[fromSlot]) {
-                                fromPlayerPosition = pos;
-                                break;
+                    if (dragType === 'batting-slot') {
+                        // Intercambiar los jugadores en el orden de bateo
+                        const fromSlot = parseInt(draggedElement.getAttribute('data-slot'));
+                        const toSlot = parseInt(this.getAttribute('data-slot'));
+                        
+                        const tempPlayer = teamData.battingOrder[fromSlot];
+                        teamData.battingOrder[fromSlot] = teamData.battingOrder[toSlot];
+                        teamData.battingOrder[toSlot] = tempPlayer;
+                        
+                        // Obtener las posiciones de los jugadores
+                        let fromPlayerPosition = "";
+                        let toPlayerPosition = "";
+                        
+                        if (teamData.battingOrder[fromSlot]) {
+                            for (const [pos, name] of Object.entries(teamData.positions)) {
+                                if (name === teamData.battingOrder[fromSlot]) {
+                                    fromPlayerPosition = pos;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    
-                    if (teamData.battingOrder[toSlot]) {
-                        for (const [pos, name] of Object.entries(teamData.positions)) {
-                            if (name === teamData.battingOrder[toSlot]) {
-                                toPlayerPosition = pos;
-                                break;
+                        
+                        if (teamData.battingOrder[toSlot]) {
+                            for (const [pos, name] of Object.entries(teamData.positions)) {
+                                if (name === teamData.battingOrder[toSlot]) {
+                                    toPlayerPosition = pos;
+                                    break;
+                                }
                             }
                         }
+                        
+                        // Actualizar la visualización
+                        document.getElementById(`slot-player-${fromSlot}`).textContent = 
+                            teamData.battingOrder[fromSlot] ? 
+                            `${teamData.battingOrder[fromSlot]} (${fromPlayerPosition})` : 
+                            '- Vacío -';
+                        document.getElementById(`slot-player-${toSlot}`).textContent = 
+                            teamData.battingOrder[toSlot] ? 
+                            `${teamData.battingOrder[toSlot]} (${toPlayerPosition})` : 
+                            '- Vacío -';
+                        
+                        showNotification('Orden de bateo actualizado');
                     }
-                    
-                    // Actualizar la visualización
-                    document.getElementById(`slot-player-${fromSlot}`).textContent = 
-                        teamData.battingOrder[fromSlot] ? 
-                        `${teamData.battingOrder[fromSlot]} (${fromPlayerPosition})` : 
-                        '- Vacío -';
-                    document.getElementById(`slot-player-${toSlot}`).textContent = 
-                        teamData.battingOrder[toSlot] ? 
-                        `${teamData.battingOrder[toSlot]} (${toPlayerPosition})` : 
-                        '- Vacío -';
-                    
-                    showNotification('Orden de bateo actualizado');
                 }
+            });
+        }
+        
+        function setupBenchDragAndDrop(element) {
+            element.setAttribute('draggable', 'true');
+            element.classList.add('draggable');
+            
+            element.addEventListener('dragstart', function(e) {
+                this.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', this.textContent);
+                e.dataTransfer.setData('type', 'bench-player');
+            });
+            
+            element.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                document.querySelectorAll('.batting-slot').forEach(slot => {
+                    slot.classList.remove('drag-over');
+                });
+                document.querySelectorAll('.bench-slot').forEach(slot => {
+                    slot.classList.remove('drag-over');
+                });
             });
         }
         
         function generatePDFPreview() {
             const pdfPreview = document.getElementById('pdfPreview');
             
+            // Generar tabla de posiciones defensivas
+            let positionsHTML = '';
+            fieldPositions.forEach(pos => {
+                // Ocultar BD para lineup infantil
+                if (teamData.category === "Lineup Infantil" && pos.id === "BD") {
+                    return;
+                }
+                
+                const playerName = teamData.positions[pos.id];
+                positionsHTML += `
+                    <tr>
+                        <td>${pos.id}</td>
+                        <td>${playerName || ''}</td>
+                    </tr>
+                `;
+            });
+            
+            // Generar orden de bateo
             let battingOrderHTML = '';
-            teamData.battingOrder.forEach((player, index) => {
-                if (index < battingOrderNumbers.length) {
+            
+            if (teamData.category === "Lineup Infantil") {
+                // Para lineup infantil: mostrar todos los jugadores
+                teamData.battingOrder.forEach((player, index) => {
                     // Obtener la posición del jugador
-                    let playerPosition = "";
+                    let playerPosition = "-";
                     if (player) {
                         for (const [pos, name] of Object.entries(teamData.positions)) {
                             if (name === player) {
@@ -1947,26 +1950,64 @@
                         }
                     }
                     
+                    const slotNumber = index < 9 ? (index + 1).toString() : (index === 9 ? "P" : (index + 1).toString());
+                    
                     battingOrderHTML += `
                         <tr>
-                            <td>${battingOrderNumbers[index]}</td>
-                            <td>${player || 'Sin asignar'}</td>
-                            <td>${playerPosition || '-'}</td>
+                            <td>${slotNumber}</td>
+                            <td>${player || ''}</td>
+                            <td>${playerPosition}</td>
                         </tr>
                     `;
-                }
-            });
+                });
+            } else {
+                // Para lineup profesional: comportamiento normal
+                teamData.battingOrder.forEach((player, index) => {
+                    if (index < battingOrderNumbers.length) {
+                        // Obtener la posición del jugador
+                        let playerPosition = "";
+                        if (player) {
+                            for (const [pos, name] of Object.entries(teamData.positions)) {
+                                if (name === player) {
+                                    playerPosition = pos;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        battingOrderHTML += `
+                            <tr>
+                                <td>${battingOrderNumbers[index]}</td>
+                                <td>${player || ''}</td>
+                                <td>${playerPosition || ''}</td>
+                            </tr>
+                        `;
+                    }
+                });
+            }
             
+            // Generar jugadores de reserva solo para lineup profesional
             let benchHTML = '';
-            if (teamData.benchLineup.length > 0) {
+            if (teamData.category === "Lineup Profesional" && teamData.benchLineup.length > 0) {
                 benchHTML = `
                     <div class="pdf-bench">
                         <h3>Jugadores de Reserva</h3>
-                        <div class="bench-players" style="justify-content: flex-start; margin-top: 10px;">
-                            ${teamData.benchLineup.map(player => `
-                                <div class="bench-player">${player}</div>
-                            `).join('')}
-                        </div>
+                        <table class="pdf-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Jugador</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${teamData.benchLineup.map((player, index) => `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${player}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
                     </div>
                 `;
             }
@@ -1978,6 +2019,21 @@
                 </div>
                 
                 <div class="pdf-lineup">
+                    <div class="pdf-positions">
+                        <h3>Posiciones Defensivas</h3>
+                        <table class="pdf-table">
+                            <thead>
+                                <tr>
+                                    <th>Posición</th>
+                                    <th>Jugador</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${positionsHTML}
+                            </tbody>
+                        </table>
+                    </div>
+                    
                     <div class="pdf-batting-order">
                         <h3>Orden de Bateo</h3>
                         <table class="pdf-table">
