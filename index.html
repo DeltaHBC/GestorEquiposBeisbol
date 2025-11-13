@@ -260,7 +260,7 @@
             position: relative;
             width: 100%;
             height: clamp(300px, 50vw, 500px);
-            background-image: url('https://i.pinimg.com/1200x/55/90/f4/5590f4d00ca3467bea6e747f37b5117d.jpg');
+            background-image: url('https://www.shutterstock.com/image-vector/image-illustration-baseball-field-seen-600nw-1495319051.jpg');
             background-size: cover;
             background-position: center;
             margin: 15px 0;
@@ -321,16 +321,17 @@
             display: block;
         }
         
-        #pos-P { top: 50%; left: 50%; }
-        #pos-C { top: 85%; left: 50%; }
-        #pos-1B { top: 60%; left: 75%; }
-        #pos-2B { top: 50%; left: 65%; }
-        #pos-3B { top: 60%; left: 25%; }
-        #pos-SS { top: 50%; left: 35%; }
-        #pos-LF { top: 30%; left: 15%; }
-        #pos-CF { top: 20%; left: 50%; }
-        #pos-RF { top: 30%; left: 85%; }
-        #pos-BD { top: 90%; left: 90%; background: var(--accent-gold); color: var(--dark-gray); }
+        /* Posiciones ajustadas para la nueva imagen */
+        #pos-P { top: 78%; left: 50%; }
+        #pos-C { top: 93%; left: 50%; }
+        #pos-1B { top: 55%; left: 80%; }
+        #pos-2B { top: 45%; left: 65%; }
+        #pos-3B { top: 55%; left: 20%; }
+        #pos-SS { top: 45%; left: 35%; }
+        #pos-LF { top: 25%; left: 10%; }
+        #pos-CF { top: 15%; left: 50%; }
+        #pos-RF { top: 25%; left: 90%; }
+        #pos-BD { top: 85%; left: 90%; background: var(--accent-gold); color: var(--dark-gray); }
         #pos-BD.assigned { background: var(--success-green); color: white; }
         
         .drag-instructions {
@@ -590,8 +591,8 @@
             background: white;
             color: black;
             padding: 20px;
-            width: 794px;
-            min-height: 1123px;
+            width: 100%;
+            max-width: 794px;
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             font-size: 14px;
@@ -982,6 +983,233 @@
             min-height: 20px;
             cursor: pointer;
         }
+        
+        /* Nuevos estilos para las mejoras solicitadas */
+        .selected-players-container {
+            background: var(--light-gray);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .selected-players-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .selected-players-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .selected-player-item {
+            background: var(--accent-gold);
+            color: var(--dark-gray);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid var(--accent-red);
+            font-family: 'Oswald', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .selected-player-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .selected-player-item.selected {
+            background: var(--accent-red);
+            color: white;
+        }
+        
+        .selected-players-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        
+        .action-btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+        
+        .action-btn-secondary {
+            background: var(--medium-gray);
+            color: var(--dark-gray);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Ajustes para la tabla de orden de bateo */
+        .lineup-table th:first-child {
+            width: auto;
+            min-width: 80px;
+        }
+        
+        .lineup-table th:nth-child(2) {
+            width: auto;
+            min-width: 150px;
+        }
+        
+        .lineup-table th:nth-child(3) {
+            width: auto;
+            min-width: 100px;
+        }
+        
+        .lineup-table th, .lineup-table td {
+            padding: 10px;
+            word-break: break-word;
+        }
+        
+        /* Nuevos estilos para intercambio de posiciones */
+        .position.draggable {
+            cursor: grab;
+        }
+        
+        .position.draggable:active {
+            cursor: grabbing;
+        }
+        
+        .position.drag-over {
+            background-color: var(--accent-gold);
+            border: 2px dashed var(--accent-red);
+            transform: translate(-50%, -50%) scale(1.15);
+        }
+        
+        .position-swap-info {
+            background: var(--light-gray);
+            border-left: 4px solid var(--primary-blue);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Mejoras para tablas responsivas */
+        .pdf-table-auto {
+            width: auto;
+            min-width: 100%;
+        }
+        
+        .pdf-table-auto th,
+        .pdf-table-auto td {
+            white-space: nowrap;
+            padding: 6px 8px;
+        }
+        
+        /* Mejoras para compatibilidad móvil */
+        .mobile-optimized {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .mobile-drag-handle {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-drag-handle {
+                display: block;
+            }
+            
+            .position {
+                touch-action: manipulation;
+            }
+            
+            .pdf-preview {
+                padding: 15px;
+                font-size: 12px;
+            }
+            
+            .pdf-table th,
+            .pdf-table td {
+                padding: 6px;
+                font-size: 11px;
+            }
+        }
+        
+        /* MEJORAS IMPLEMENTADAS: Tablas optimizadas */
+        .table-optimized {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        
+        .table-optimized th,
+        .table-optimized td {
+            padding: 8px 6px;
+            text-align: left;
+            border: 1px solid var(--medium-gray);
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .table-optimized th {
+            background: var(--primary-blue);
+            color: white;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .table-optimized th:nth-child(1) { width: 15%; }
+        .table-optimized th:nth-child(2) { width: 60%; }
+        .table-optimized th:nth-child(3) { width: 25%; }
+        
+        /* MEJORAS IMPLEMENTADAS: Compatibilidad de imagen */
+        .image-compatibility {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+        
+        .image-download-compatible {
+            display: inline-block;
+            background: var(--primary-blue);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .image-download-compatible:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -1064,16 +1292,39 @@
                 <h2>Posicionamiento en el Campo</h2>
             </div>
             
+            <!-- NUEVO: Contenedor para jugadores seleccionados -->
+            <div class="selected-players-container" id="selectedPlayersContainer" style="display: none;">
+                <div class="selected-players-title">
+                    <i class="fas fa-users"></i> Jugadores Seleccionados
+                </div>
+                <div class="selected-players-list" id="selectedPlayersList">
+                    <!-- Los jugadores seleccionados aparecerán aquí -->
+                </div>
+                <div class="selected-players-actions">
+                    <button class="action-btn action-btn-secondary" onclick="clearSelectedPlayers()">
+                        <i class="fas fa-times"></i> Limpiar Selección
+                    </button>
+                    <button class="action-btn action-btn-primary" onclick="assignSelectedToPosition()">
+                        <i class="fas fa-map-marker-alt"></i> Asignar a Posición
+                    </button>
+                </div>
+            </div>
+            
             <div class="player-management">
                 <div class="player-input-section">
-                    <p>Selecciona un jugador y luego haz clic en una posición para asignarlo:</p>
+                    <p>Selecciona uno o varios jugadores y luego haz clic en una posición para asignarlos:</p>
                     
                     <div class="drag-instructions">
-                        <i class="fas fa-mouse-pointer"></i> Haz clic en un jugador y luego en una posición para asignarlo
+                        <i class="fas fa-mouse-pointer"></i> Haz clic en los jugadores para seleccionarlos y luego en una posición para asignarlos
+                    </div>
+                    
+                    <!-- NUEVO: Instrucciones para intercambiar posiciones -->
+                    <div class="position-swap-info">
+                        <i class="fas fa-exchange-alt"></i> <strong>Intercambiar posiciones:</strong> Arrastra un círculo de posición sobre otro para intercambiar jugadores.
                     </div>
                     
                     <div class="player-list" id="playerList">
-                        
+                        <!-- Los jugadores aparecerán aquí -->
                     </div>
                 </div>
                 
@@ -1091,7 +1342,7 @@
             
             <div class="baseball-field-container">
                 <div class="baseball-field" id="baseballField">
-                    
+                    <!-- Las posiciones aparecerán aquí -->
                 </div>
             </div>
             
@@ -1103,7 +1354,7 @@
             <div class="bench-container">
                 <div class="bench-title">Banquillo (Jugadores de Reserva)</div>
                 <div class="bench-players" id="benchPlayers">
-                    
+                    <!-- Los jugadores de reserva aparecerán aquí -->
                 </div>
             </div>
             
@@ -1138,7 +1389,7 @@
                 <div class="lineup-grid">
                     <div class="lineup-info">
                         <h3>Información del Equipo</h3>
-                        <table class="lineup-table">
+                        <table class="table-optimized">
                             <tr>
                                 <th>Equipo:</th>
                                 <td id="lineupTeamNameTable">-</td>
@@ -1162,14 +1413,14 @@
                 <div class="lineup-batting-order">
                     <h3 class="batting-order-title">ORDEN DE BATEO</h3>
                     <div class="batting-order" id="battingOrder">
-                       
+                        <!-- El orden de bateo aparecerá aquí -->
                     </div>
                 </div>
                 
                 <div class="bench-lineup" id="benchLineupSection">
                     <h3 class="bench-lineup-title">JUGADORES DE RESERVA</h3>
                     <div class="bench-lineup-container" id="benchLineup">
-                       
+                        <!-- Los jugadores de reserva aparecerán aquí -->
                     </div>
                 </div>
             </div>
@@ -1246,18 +1497,24 @@
         
         let selectedPlayer = null;
         
+        // NUEVA: Variable para almacenar jugadores seleccionados
+        let selectedPlayers = [];
+        
+        // NUEVA: Variable para almacenar la imagen generada
+        let generatedImageData = null;
+        
         // Posiciones mejoradas para el campo - distribución realista
         const fieldPositions = [
-            { id: "P", name: "P", top: "50%", left: "50%" },
-            { id: "C", name: "C", top: "85%", left: "50%" },
-            { id: "1B", name: "1B", top: "60%", left: "75%" },
-            { id: "2B", name: "2B", top: "50%", left: "65%" },
-            { id: "3B", name: "3B", top: "60%", left: "25%" },
-            { id: "SS", name: "SS", top: "50%", left: "35%" },
-            { id: "LF", name: "LF", top: "30%", left: "15%" },
-            { id: "CF", name: "CF", top: "20%", left: "50%" },
-            { id: "RF", name: "RF", top: "30%", left: "85%" },
-            { id: "BD", name: "BD", top: "90%", left: "90%" }
+            { id: "P", name: "P", top: "78%", left: "50%" },
+            { id: "C", name: "C", top: "93%", left: "50%" },
+            { id: "1B", name: "1B", top: "55%", left: "80%" },
+            { id: "2B", name: "2B", top: "45%", left: "65%" },
+            { id: "3B", name: "3B", top: "55%", left: "20%" },
+            { id: "SS", name: "SS", top: "45%", left: "35%" },
+            { id: "LF", name: "LF", top: "25%", left: "10%" },
+            { id: "CF", name: "CF", top: "15%", left: "50%" },
+            { id: "RF", name: "RF", top: "25%", left: "90%" },
+            { id: "BD", name: "BD", top: "85%", left: "90%" }
         ];
         
         const battingOrderNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "P"];
@@ -1269,7 +1526,26 @@
             generatePlayerInputs();
             generateFieldPositions();
             setupClickAssignment();
+            setupMultiSelection(); // NUEVA: Configurar selección múltiple
+            setupPositionDragAndDrop(); // NUEVA: Configurar arrastre de posiciones
+            
+            // Mejorar compatibilidad móvil
+            improveMobileCompatibility();
         });
+        
+        // NUEVA: Función para mejorar compatibilidad móvil
+        function improveMobileCompatibility() {
+            // Prevenir zoom en elementos interactivos
+            const interactiveElements = document.querySelectorAll('input, select, button, .player-card, .position');
+            interactiveElements.forEach(el => {
+                el.classList.add('mobile-optimized');
+            });
+            
+            // Mejorar rendimiento en dispositivos táctiles
+            if ('ontouchstart' in window) {
+                document.body.classList.add('touch-device');
+            }
+        }
         
         function generatePlayerInputs() {
             const container = document.getElementById('playersContainer');
@@ -1305,9 +1581,134 @@
                 positionEl.innerHTML = `<div>${pos.name}</div><small>Sin asignar</small>`;
                 field.appendChild(positionEl);
             });
+            
+            // Configurar arrastre para las posiciones
+            setupPositionDragAndDrop();
+        }
+        
+        // NUEVA: Función para configurar el arrastre de posiciones
+        function setupPositionDragAndDrop() {
+            const positions = document.querySelectorAll('.position');
+            
+            positions.forEach(position => {
+                position.setAttribute('draggable', 'true');
+                position.classList.add('draggable');
+                
+                position.addEventListener('dragstart', function(e) {
+                    // Solo permitir arrastrar posiciones que tengan jugadores asignados
+                    if (!this.classList.contains('assigned')) {
+                        e.preventDefault();
+                        return;
+                    }
+                    
+                    this.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', this.id);
+                    e.dataTransfer.setData('type', 'position');
+                });
+                
+                position.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                    document.querySelectorAll('.position').forEach(pos => {
+                        pos.classList.remove('drag-over');
+                    });
+                });
+                
+                position.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    // Solo permitir soltar si es una posición diferente
+                    if (this.classList.contains('dragging')) {
+                        return;
+                    }
+                    this.classList.add('drag-over');
+                });
+                
+                position.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over');
+                });
+                
+                position.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    
+                    const draggedId = e.dataTransfer.getData('text/plain');
+                    const draggedElement = document.getElementById(draggedId);
+                    const dragType = e.dataTransfer.getData('type');
+                    
+                    if (draggedElement && draggedElement !== this && dragType === 'position') {
+                        // Intercambiar jugadores entre posiciones
+                        swapPlayersBetweenPositions(draggedElement, this);
+                    }
+                });
+            });
+        }
+        
+        // NUEVA: Función para intercambiar jugadores entre posiciones
+        function swapPlayersBetweenPositions(pos1, pos2) {
+            const pos1Id = pos1.getAttribute('data-position');
+            const pos2Id = pos2.getAttribute('data-position');
+            
+            const player1 = teamData.positions[pos1Id];
+            const player2 = teamData.positions[pos2Id];
+            
+            // Intercambiar jugadores en el objeto teamData
+            teamData.positions[pos1Id] = player2;
+            teamData.positions[pos2Id] = player1;
+            
+            // Actualizar la visualización
+            if (player1) {
+                pos2.innerHTML = `<div>${pos2Id}</div><small>${player1}</small>`;
+                pos2.classList.add('assigned');
+            } else {
+                pos2.innerHTML = `<div>${pos2Id}</div><small>Sin asignar</small>`;
+                pos2.classList.remove('assigned');
+            }
+            
+            if (player2) {
+                pos1.innerHTML = `<div>${pos1Id}</div><small>${player2}</small>`;
+                pos1.classList.add('assigned');
+            } else {
+                pos1.innerHTML = `<div>${pos1Id}</div><small>Sin asignar</small>`;
+                pos1.classList.remove('assigned');
+            }
+            
+            // Actualizar BD si es necesario
+            if (pos1Id === "BD" || pos2Id === "BD") {
+                if (teamData.positions["BD"]) {
+                    document.getElementById('bdBox').style.display = 'block';
+                    document.getElementById('bdPlayer').textContent = teamData.positions["BD"];
+                } else {
+                    document.getElementById('bdBox').style.display = 'none';
+                    document.getElementById('bdPlayer').textContent = 'Sin asignar';
+                }
+            }
+            
+            updateBench();
+            
+            showNotification(`Jugadores intercambiados entre ${pos1Id} y ${pos2Id}`);
         }
         
         function setupClickAssignment() {
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('position') || 
+                    e.target.parentElement.classList.contains('position')) {
+                    
+                    const positionEl = e.target.classList.contains('position') 
+                        ? e.target 
+                        : e.target.parentElement;
+                    
+                    if (selectedPlayers.length > 0) {
+                        assignSelectedPlayersToPosition(positionEl);
+                    } else if (selectedPlayer) {
+                        assignPlayerToPosition(selectedPlayer, positionEl);
+                    } else {
+                        showNotification('Primero selecciona uno o más jugadores de la lista');
+                    }
+                }
+            });
+        }
+        
+        // NUEVA: Función para manejar la selección múltiple de jugadores
+        function setupMultiSelection() {
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('player-card') || 
                     e.target.parentElement.classList.contains('player-card')) {
@@ -1316,37 +1717,104 @@
                         ? e.target 
                         : e.target.parentElement;
                     
-                    document.querySelectorAll('.player-card.selected').forEach(card => {
-                        card.classList.remove('selected');
-                    });
+                    const playerName = playerCard.textContent.trim();
                     
-                    playerCard.classList.add('selected');
-                    selectedPlayer = playerCard;
-                    
-                    document.querySelectorAll('.position').forEach(pos => {
-                        pos.classList.add('highlight');
-                    });
-                }
-                
-                if (e.target.classList.contains('position') || 
-                    e.target.parentElement.classList.contains('position')) {
-                    
-                    const positionEl = e.target.classList.contains('position') 
-                        ? e.target 
-                        : e.target.parentElement;
-                    
-                    if (selectedPlayer) {
-                        assignPlayerToPosition(selectedPlayer, positionEl);
+                    // Si el jugador ya está seleccionado, quitarlo de la selección
+                    if (selectedPlayers.includes(playerName)) {
+                        playerCard.classList.remove('selected');
+                        selectedPlayers = selectedPlayers.filter(p => p !== playerName);
                     } else {
-                        showNotification('Primero selecciona un jugador de la lista');
+                        // Si no está seleccionado, agregarlo
+                        playerCard.classList.add('selected');
+                        selectedPlayers.push(playerName);
+                    }
+                    
+                    // Actualizar la lista de jugadores seleccionados
+                    updateSelectedPlayersList();
+                    
+                    // Mostrar u ocultar el contenedor de jugadores seleccionados
+                    if (selectedPlayers.length > 0) {
+                        document.getElementById('selectedPlayersContainer').style.display = 'block';
+                    } else {
+                        document.getElementById('selectedPlayersContainer').style.display = 'none';
                     }
                 }
             });
         }
         
-        function assignPlayerToPosition(playerCard, positionEl) {
+        // NUEVA: Función para actualizar la lista de jugadores seleccionados
+        function updateSelectedPlayersList() {
+            const selectedPlayersList = document.getElementById('selectedPlayersList');
+            selectedPlayersList.innerHTML = '';
+            
+            selectedPlayers.forEach(player => {
+                const playerItem = document.createElement('div');
+                playerItem.className = 'selected-player-item';
+                playerItem.textContent = player;
+                playerItem.setAttribute('data-player', player);
+                
+                playerItem.addEventListener('click', function() {
+                    // Remover jugador de la selección al hacer clic
+                    selectedPlayers = selectedPlayers.filter(p => p !== player);
+                    updateSelectedPlayersList();
+                    
+                    // Actualizar la tarjeta del jugador
+                    const playerCards = document.querySelectorAll('.player-card');
+                    playerCards.forEach(card => {
+                        if (card.textContent.trim() === player) {
+                            card.classList.remove('selected');
+                        }
+                    });
+                    
+                    // Ocultar contenedor si no hay jugadores seleccionados
+                    if (selectedPlayers.length === 0) {
+                        document.getElementById('selectedPlayersContainer').style.display = 'none';
+                    }
+                });
+                
+                selectedPlayersList.appendChild(playerItem);
+            });
+        }
+        
+        // NUEVA: Función para asignar jugadores seleccionados a una posición
+        function assignSelectedPlayersToPosition(positionEl) {
             const positionId = positionEl.getAttribute('data-position');
+            
+            // Para posiciones normales, solo asignar un jugador
+            if (positionId !== "BD") {
+                if (selectedPlayers.length > 1) {
+                    showNotification('Solo puedes asignar un jugador a esta posición');
+                    return;
+                }
+                
+                const playerName = selectedPlayers[0];
+                assignSinglePlayerToPosition(playerName, positionEl);
+            } else {
+                // Para BD, podemos asignar múltiples jugadores (si es necesario)
+                selectedPlayers.forEach(playerName => {
+                    assignSinglePlayerToPosition(playerName, positionEl);
+                });
+            }
+            
+            // Limpiar selección después de asignar
+            clearSelectedPlayers();
+        }
+        
+        function assignPlayerToPosition(playerCard, positionEl) {
             const playerName = playerCard.textContent.trim();
+            assignSinglePlayerToPosition(playerName, positionEl);
+            
+            playerCard.classList.remove('selected');
+            selectedPlayer = null;
+            
+            document.querySelectorAll('.position').forEach(pos => {
+                pos.classList.remove('highlight');
+            });
+        }
+        
+        // NUEVA: Función para asignar un solo jugador a una posición
+        function assignSinglePlayerToPosition(playerName, positionEl) {
+            const positionId = positionEl.getAttribute('data-position');
             
             if (positionId === "BD") {
                 document.getElementById('bdBox').style.display = 'block';
@@ -1369,18 +1837,46 @@
             
             teamData.positions[positionId] = playerName;
             
-            playerCard.style.display = 'none';
-            
-            playerCard.classList.remove('selected');
-            selectedPlayer = null;
-            
-            document.querySelectorAll('.position').forEach(pos => {
-                pos.classList.remove('highlight');
-            });
+            // Ocultar la tarjeta del jugador asignado
+            const playerCards = document.querySelectorAll('.player-card');
+            for (let card of playerCards) {
+                if (card.textContent.trim() === playerName) {
+                    card.style.display = 'none';
+                    break;
+                }
+            }
             
             updateBench();
             
             showNotification(`¡${playerName} asignado a ${positionId}!`);
+        }
+        
+        // NUEVA: Función para limpiar la selección de jugadores
+        function clearSelectedPlayers() {
+            selectedPlayers = [];
+            
+            // Quitar la clase 'selected' de todas las tarjetas de jugador
+            document.querySelectorAll('.player-card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Ocultar el contenedor de jugadores seleccionados
+            document.getElementById('selectedPlayersContainer').style.display = 'none';
+        }
+        
+        // NUEVA: Función para asignar jugadores seleccionados a una posición (desde el botón)
+        function assignSelectedToPosition() {
+            if (selectedPlayers.length === 0) {
+                showNotification('No hay jugadores seleccionados');
+                return;
+            }
+            
+            // Resaltar todas las posiciones
+            document.querySelectorAll('.position').forEach(pos => {
+                pos.classList.add('highlight');
+            });
+            
+            showNotification('Ahora haz clic en una posición para asignar los jugadores seleccionados');
         }
         
         function autoAssign() {
@@ -1420,6 +1916,7 @@
             });
             
             selectedPlayer = null;
+            clearSelectedPlayers();
             
             document.getElementById('bdBox').style.display = 'none';
             document.getElementById('bdPlayer').textContent = 'Sin asignar';
@@ -1627,6 +2124,7 @@
             });
             
             selectedPlayer = null;
+            clearSelectedPlayers();
         }
         
         function generateLineupCard() {
@@ -1745,7 +2243,7 @@
                         <div class="mobile-drag-handle"><i class="fas fa-grip-lines"></i></div>
                     `;
                     
-                    if (slotNumber === "P") {
+                    if (slotNumber === "P" && teamData.category !== "Lineup Infantil") {
                         slot.style.backgroundColor = "#f0f8ff"; 
                         slot.style.cursor = "not-allowed";
                     } else {
@@ -1797,8 +2295,8 @@
         
         function setupDragAndDrop(element) {
             element.addEventListener('dragstart', function(e) {
-                // Solo permitir arrastrar si no es la posición P
-                if (this.querySelector('.slot-number').textContent === "P") {
+                // Solo permitir arrastrar si no es la posición P en categoría profesional
+                if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
                     e.preventDefault();
                     return;
                 }
@@ -1820,8 +2318,8 @@
             
             element.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                // Solo permitir soltar si no es la posición P
-                if (this.querySelector('.slot-number').textContent === "P") {
+                // Solo permitir soltar si no es la posición P en categoría profesional
+                if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
                     return;
                 }
                 this.classList.add('drag-over');
@@ -1835,8 +2333,8 @@
                 e.preventDefault();
                 this.classList.remove('drag-over');
                 
-                // Solo permitir soltar si no es la posición P
-                if (this.querySelector('.slot-number').textContent === "P") {
+                // Solo permitir soltar si no es la posición P en categoría profesional
+                if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
                     return;
                 }
                 
@@ -1916,24 +2414,7 @@
         function generatePDFPreview() {
             const pdfPreview = document.getElementById('pdfPreview');
             
-            // Generar tabla de posiciones defensivas
-            let positionsHTML = '';
-            fieldPositions.forEach(pos => {
-                // Ocultar BD para lineup infantil
-                if (teamData.category === "Lineup Infantil" && pos.id === "BD") {
-                    return;
-                }
-                
-                const playerName = teamData.positions[pos.id];
-                positionsHTML += `
-                    <tr>
-                        <td>${pos.id}</td>
-                        <td>${playerName || ''}</td>
-                    </tr>
-                `;
-            });
-            
-            // Generar orden de bateo
+            // Generar orden de bateo (sin tabla de posiciones defensivas)
             let battingOrderHTML = '';
             
             if (teamData.category === "Lineup Infantil") {
@@ -1992,10 +2473,10 @@
                 benchHTML = `
                     <div class="pdf-bench">
                         <h3>Jugadores de Reserva</h3>
-                        <table class="pdf-table">
+                        <table class="table-optimized">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>Orden</th>
                                     <th>Jugador</th>
                                 </tr>
                             </thead>
@@ -2019,27 +2500,12 @@
                 </div>
                 
                 <div class="pdf-lineup">
-                    <div class="pdf-positions">
-                        <h3>Posiciones Defensivas</h3>
-                        <table class="pdf-table">
-                            <thead>
-                                <tr>
-                                    <th>Posición</th>
-                                    <th>Jugador</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${positionsHTML}
-                            </tbody>
-                        </table>
-                    </div>
-                    
                     <div class="pdf-batting-order">
                         <h3>Orden de Bateo</h3>
-                        <table class="pdf-table">
+                        <table class="table-optimized">
                             <thead>
                                 <tr>
-                                    <th>Número</th>
+                                    <th>Orden</th>
                                     <th>Jugador</th>
                                     <th>Posición</th>
                                 </tr>
@@ -2053,25 +2519,94 @@
                 
                 ${benchHTML}
             `;
+            
+            // Ajustar tablas al contenido
+            adjustTablesToContent();
+        }
+        
+        // MEJORADA: Función para ajustar tablas al contenido
+        function adjustTablesToContent() {
+            const tables = document.querySelectorAll('.table-optimized');
+            
+            tables.forEach(table => {
+                // Calcular ancho máximo de cada columna
+                const colWidths = [];
+                const rows = table.querySelectorAll('tr');
+                
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('th, td');
+                    cells.forEach((cell, index) => {
+                        // Calcular el ancho basado en el contenido
+                        const content = cell.textContent.trim();
+                        const contentWidth = content.length * 8; // Aproximación en píxeles
+                        
+                        if (!colWidths[index] || contentWidth > colWidths[index]) {
+                            colWidths[index] = contentWidth;
+                        }
+                    });
+                });
+                
+                // Aplicar anchos calculados (limitando el máximo)
+                const totalWidth = colWidths.reduce((sum, width) => sum + width, 0);
+                const maxWidth = 700; // Ancho máximo para la tabla
+                
+                if (totalWidth > maxWidth) {
+                    // Escalar proporcionalmente
+                    const scaleFactor = maxWidth / totalWidth;
+                    colWidths.forEach((width, index) => {
+                        colWidths[index] = Math.floor(width * scaleFactor);
+                    });
+                }
+                
+                // Aplicar anchos a las celdas del encabezado
+                const headerRow = table.querySelector('tr');
+                if (headerRow) {
+                    const headerCells = headerRow.querySelectorAll('th');
+                    headerCells.forEach((cell, index) => {
+                        if (colWidths[index]) {
+                            cell.style.width = `${colWidths[index]}px`;
+                            cell.style.minWidth = `${colWidths[index]}px`;
+                        }
+                    });
+                }
+            });
         }
         
         function generatePDF() {
-            html2canvas(document.getElementById('pdfPreview'), {
+            const pdfPreview = document.getElementById('pdfPreview');
+            
+            // Mostrar mensaje de carga
+            showNotification('Generando PDF, por favor espera...');
+            
+            html2canvas(pdfPreview, {
                 scale: 2, // Aumenta la calidad
                 useCORS: true,
-                logging: false
+                logging: false,
+                useCORS: true,
+                onclone: function(clonedDoc) {
+                    // Asegurar que las tablas se vean bien en el PDF
+                    const tables = clonedDoc.querySelectorAll('table');
+                    tables.forEach(table => {
+                        table.style.width = 'auto';
+                        table.style.borderCollapse = 'collapse';
+                    });
+                }
             }).then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
                 
-                // Calcular dimensiones para que la imagen ocupe toda la página A4
+                // Calcular dimensiones para que la imagen ocupe el espacio necesario
                 const imgWidth = 210; // Ancho A4 en mm
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
                 
+                // Agregar imagen al PDF
                 pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
                 pdf.save(`${teamData.name.replace(/\s+/g, '_')}_lineup_oficial.pdf`);
                 
                 showNotification('¡PDF profesional generado exitosamente!');
+            }).catch(error => {
+                console.error('Error generando PDF:', error);
+                showNotification('Error al generar el PDF. Intenta nuevamente.');
             });
         }
         
