@@ -257,16 +257,16 @@
             overflow: hidden;
         }
         .baseball-field {
-            position: relative;
-            width: 100%;
-            height: clamp(300px, 50vw, 500px);
-            background-image: url('https://www.shutterstock.com/image-vector/image-illustration-baseball-field-seen-600nw-1495319051.jpg');
-            background-size: cover;
-            background-position: center;
-            margin: 15px 0;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+           position: relative;
+           width: 100%;
+           height: clamp(300px, 50vw, 500px);
+           background-image: url('https://www.shutterstock.com/image-vector/image-illustration-baseball-field-seen-600nw-1495319051.jpg');
+           background-size: cover;
+           background-position: center;
+           margin: 15px 0;
+           border-radius: 6px;
+           overflow: hidden;
+           box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
         }
         .position {
             position: absolute;
@@ -1277,7 +1277,7 @@
             <p class="player-counter">Ingresa los nombres de los jugadores (mínimo 10, máximo 15):</p>
             
             <div id="playersContainer">
-             
+                <!-- Los campos de jugadores se generarán dinámicamente -->
             </div>
             
             <div class="btn-container">
@@ -1440,7 +1440,7 @@
             
             <div class="pdf-preview-container">
                 <div class="pdf-preview" id="pdfPreview">
-                    
+                    <!-- La vista previa del PDF aparecerá aquí -->
                 </div>
             </div>
             
@@ -1483,41 +1483,40 @@
     </div>
 
     <script>
-        // SOLUCIÓN COMPLETA: Todo el código JavaScript dentro de DOMContentLoaded
+        // Variables globales
+        let teamData = {
+            name: "",
+            coach: "",
+            category: "",
+            date: "",
+            players: [],
+            positions: {},
+            bench: [],
+            battingOrder: [],
+            benchLineup: []
+        };
+        
+        let selectedPlayer = null;
+        let selectedPlayers = [];
+        let generatedImageData = null;
+        
+        const fieldPositions = [
+            { id: "P", name: "P", top: "78%", left: "50%" },
+            { id: "C", name: "C", top: "93%", left: "50%" },
+            { id: "1B", name: "1B", top: "55%", left: "80%" },
+            { id: "2B", name: "2B", top: "45%", left: "65%" },
+            { id: "3B", name: "3B", top: "55%", left: "20%" },
+            { id: "SS", name: "SS", top: "45%", left: "35%" },
+            { id: "LF", name: "LF", top: "25%", left: "10%" },
+            { id: "CF", name: "CF", top: "15%", left: "50%" },
+            { id: "RF", name: "RF", top: "25%", left: "90%" },
+            { id: "BD", name: "BD", top: "85%", left: "90%" }
+        ];
+        
+        const battingOrderNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "P"];
+        
+        // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            // Variables globales
-            let teamData = {
-                name: "",
-                coach: "",
-                category: "",
-                date: "",
-                players: [],
-                positions: {},
-                bench: [],
-                battingOrder: [],
-                benchLineup: []
-            };
-            
-            let selectedPlayer = null;
-            let selectedPlayers = [];
-            let generatedImageData = null;
-            
-            const fieldPositions = [
-                { id: "P", name: "P", top: "78%", left: "50%" },
-                { id: "C", name: "C", top: "93%", left: "50%" },
-                { id: "1B", name: "1B", top: "55%", left: "80%" },
-                { id: "2B", name: "2B", top: "45%", left: "65%" },
-                { id: "3B", name: "3B", top: "55%", left: "20%" },
-                { id: "SS", name: "SS", top: "45%", left: "35%" },
-                { id: "LF", name: "LF", top: "25%", left: "10%" },
-                { id: "CF", name: "CF", top: "15%", left: "50%" },
-                { id: "RF", name: "RF", top: "25%", left: "90%" },
-                { id: "BD", name: "BD", top: "85%", left: "90%" }
-            ];
-            
-            const battingOrderNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "P"];
-            
-            // Inicialización
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('date').setAttribute('max', today);
             
@@ -1527,735 +1526,759 @@
             setupMultiSelection();
             setupPositionDragAndDrop();
             improveMobileCompatibility();
+        });
+        
+        // Funciones globales para los onclick
+        window.nextStep = nextStep;
+        window.prevStep = prevStep;
+        window.autoAssign = autoAssign;
+        window.clearAssignments = clearAssignments;
+        window.generatePDF = generatePDF;
+        window.scrollToTop = scrollToTop;
+        window.clearSelectedPlayers = clearSelectedPlayers;
+        window.assignSelectedToPosition = assignSelectedToPosition;
+        
+        // Funciones originales completas
+        function generatePlayerInputs() {
+            const container = document.getElementById('playersContainer');
+            container.innerHTML = '';
             
-            // Hacer funciones globales para los onclick
-            window.nextStep = nextStep;
-            window.prevStep = prevStep;
-            window.autoAssign = autoAssign;
-            window.clearAssignments = clearAssignments;
-            window.generatePDF = generatePDF;
-            window.scrollToTop = scrollToTop;
-            window.clearSelectedPlayers = clearSelectedPlayers;
-            window.assignSelectedToPosition = assignSelectedToPosition;
-            
-            // Funciones originales completas
-            function generatePlayerInputs() {
-                const container = document.getElementById('playersContainer');
-                container.innerHTML = '';
-                
-                for (let i = 1; i <= 15; i++) {
-                    const div = document.createElement('div');
-                    div.className = 'form-group';
-                    div.innerHTML = `
-                        <label for="player${i}"><i class="fas fa-user"></i> Jugador ${i}</label>
-                        <input type="text" id="player${i}" placeholder="Nombre del jugador ${i}" ${i > 10 ? 'class="optional-player"' : ''}>
-                    `;
-                    container.appendChild(div);
-                }
+            for (let i = 1; i <= 15; i++) {
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.innerHTML = `
+                    <label for="player${i}"><i class="fas fa-user"></i> Jugador ${i}</label>
+                    <input type="text" id="player${i}" placeholder="Nombre del jugador ${i}" ${i > 10 ? 'class="optional-player"' : ''}>
+                `;
+                container.appendChild(div);
             }
+        }
+        
+        function generateFieldPositions() {
+            const field = document.getElementById('baseballField');
+            field.innerHTML = '';
             
-            function generateFieldPositions() {
-                const field = document.getElementById('baseballField');
-                field.innerHTML = '';
-                
-                fieldPositions.forEach(pos => {
-                    if (teamData.category === "Lineup Infantil" && pos.id === "BD") {
-                        return;
-                    }
-                    
-                    const positionEl = document.createElement('div');
-                    positionEl.className = 'position';
-                    positionEl.id = `pos-${pos.id}`;
-                    positionEl.style.top = pos.top;
-                    positionEl.style.left = pos.left;
-                    positionEl.setAttribute('data-position', pos.id);
-                    positionEl.innerHTML = `<div>${pos.name}</div><small>Sin asignar</small>`;
-                    field.appendChild(positionEl);
-                });
-                
-                setupPositionDragAndDrop();
-            }
-            
-            function setupClickAssignment() {
-                document.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('position') || 
-                        e.target.parentElement.classList.contains('position')) {
-                        
-                        const positionEl = e.target.classList.contains('position') 
-                            ? e.target 
-                            : e.target.parentElement;
-                        
-                        if (selectedPlayers.length > 0) {
-                            assignSelectedPlayersToPosition(positionEl);
-                        } else if (selectedPlayer) {
-                            assignPlayerToPosition(selectedPlayer, positionEl);
-                        } else {
-                            showNotification('Primero selecciona uno o más jugadores de la lista');
-                        }
-                    }
-                });
-            }
-            
-            function setupMultiSelection() {
-                document.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('player-card') || 
-                        e.target.parentElement.classList.contains('player-card')) {
-                        
-                        const playerCard = e.target.classList.contains('player-card') 
-                            ? e.target 
-                            : e.target.parentElement;
-                        
-                        const playerName = playerCard.textContent.trim();
-                        
-                        if (selectedPlayers.includes(playerName)) {
-                            playerCard.classList.remove('selected');
-                            selectedPlayers = selectedPlayers.filter(p => p !== playerName);
-                        } else {
-                            playerCard.classList.add('selected');
-                            selectedPlayers.push(playerName);
-                        }
-                        
-                        updateSelectedPlayersList();
-                        
-                        if (selectedPlayers.length > 0) {
-                            document.getElementById('selectedPlayersContainer').style.display = 'block';
-                        } else {
-                            document.getElementById('selectedPlayersContainer').style.display = 'none';
-                        }
-                    }
-                });
-            }
-            
-            function updateSelectedPlayersList() {
-                const selectedPlayersList = document.getElementById('selectedPlayersList');
-                selectedPlayersList.innerHTML = '';
-                
-                selectedPlayers.forEach(player => {
-                    const playerItem = document.createElement('div');
-                    playerItem.className = 'selected-player-item';
-                    playerItem.textContent = player;
-                    playerItem.setAttribute('data-player', player);
-                    
-                    playerItem.addEventListener('click', function() {
-                        selectedPlayers = selectedPlayers.filter(p => p !== player);
-                        updateSelectedPlayersList();
-                        
-                        const playerCards = document.querySelectorAll('.player-card');
-                        playerCards.forEach(card => {
-                            if (card.textContent.trim() === player) {
-                                card.classList.remove('selected');
-                            }
-                        });
-                        
-                        if (selectedPlayers.length === 0) {
-                            document.getElementById('selectedPlayersContainer').style.display = 'none';
-                        }
-                    });
-                    
-                    selectedPlayersList.appendChild(playerItem);
-                });
-            }
-            
-            function assignSelectedPlayersToPosition(positionEl) {
-                const positionId = positionEl.getAttribute('data-position');
-                
-                if (positionId !== "BD") {
-                    if (selectedPlayers.length > 1) {
-                        showNotification('Solo puedes asignar un jugador a esta posición');
-                        return;
-                    }
-                    
-                    const playerName = selectedPlayers[0];
-                    assignSinglePlayerToPosition(playerName, positionEl);
-                } else {
-                    selectedPlayers.forEach(playerName => {
-                        assignSinglePlayerToPosition(playerName, positionEl);
-                    });
-                }
-                
-                clearSelectedPlayers();
-            }
-            
-            function assignPlayerToPosition(playerCard, positionEl) {
-                const playerName = playerCard.textContent.trim();
-                assignSinglePlayerToPosition(playerName, positionEl);
-                
-                playerCard.classList.remove('selected');
-                selectedPlayer = null;
-                
-                document.querySelectorAll('.position').forEach(pos => {
-                    pos.classList.remove('highlight');
-                });
-            }
-            
-            function assignSinglePlayerToPosition(playerName, positionEl) {
-                const positionId = positionEl.getAttribute('data-position');
-                
-                if (positionId === "BD") {
-                    document.getElementById('bdBox').style.display = 'block';
-                    document.getElementById('bdPlayer').textContent = playerName;
-                }
-                
-                const existingPlayerName = teamData.positions[positionId];
-                if (existingPlayerName) {
-                    const playerCards = document.querySelectorAll('.player-card');
-                    for (let card of playerCards) {
-                        if (card.textContent.trim() === existingPlayerName && card.style.display === 'none') {
-                            card.style.display = 'block';
-                            break;
-                        }
-                    }
-                }
-                
-                positionEl.innerHTML = `<div>${positionEl.id.replace('pos-', '')}</div><small>${playerName}</small>`;
-                positionEl.classList.add('assigned');
-                
-                teamData.positions[positionId] = playerName;
-                
-                const playerCards = document.querySelectorAll('.player-card');
-                for (let card of playerCards) {
-                    if (card.textContent.trim() === playerName) {
-                        card.style.display = 'none';
-                        break;
-                    }
-                }
-                
-                updateBench();
-                
-                showNotification(`¡${playerName} asignado a ${positionId}!`);
-            }
-            
-            function clearSelectedPlayers() {
-                selectedPlayers = [];
-                
-                document.querySelectorAll('.player-card.selected').forEach(card => {
-                    card.classList.remove('selected');
-                });
-                
-                document.getElementById('selectedPlayersContainer').style.display = 'none';
-            }
-            
-            function assignSelectedToPosition() {
-                if (selectedPlayers.length === 0) {
-                    showNotification('No hay jugadores seleccionados');
+            fieldPositions.forEach(pos => {
+                if (teamData.category === "Lineup Infantil" && pos.id === "BD") {
                     return;
                 }
                 
-                document.querySelectorAll('.position').forEach(pos => {
-                    pos.classList.add('highlight');
+                const positionEl = document.createElement('div');
+                positionEl.className = 'position';
+                positionEl.id = `pos-${pos.id}`;
+                positionEl.style.top = pos.top;
+                positionEl.style.left = pos.left;
+                positionEl.setAttribute('data-position', pos.id);
+                positionEl.innerHTML = `<div>${pos.name}</div><small>Sin asignar</small>`;
+                field.appendChild(positionEl);
+            });
+            
+            setupPositionDragAndDrop();
+        }
+        
+        function setupClickAssignment() {
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('position') || 
+                    e.target.parentElement.classList.contains('position')) {
+                    
+                    const positionEl = e.target.classList.contains('position') 
+                        ? e.target 
+                        : e.target.parentElement;
+                    
+                    if (selectedPlayers.length > 0) {
+                        assignSelectedPlayersToPosition(positionEl);
+                    } else if (selectedPlayer) {
+                        assignPlayerToPosition(selectedPlayer, positionEl);
+                    } else {
+                        showNotification('Primero selecciona uno o más jugadores de la lista');
+                    }
+                }
+            });
+        }
+        
+        function setupMultiSelection() {
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('player-card') || 
+                    e.target.parentElement.classList.contains('player-card')) {
+                    
+                    const playerCard = e.target.classList.contains('player-card') 
+                        ? e.target 
+                        : e.target.parentElement;
+                    
+                    const playerName = playerCard.textContent.trim();
+                    
+                    if (selectedPlayers.includes(playerName)) {
+                        playerCard.classList.remove('selected');
+                        selectedPlayers = selectedPlayers.filter(p => p !== playerName);
+                    } else {
+                        playerCard.classList.add('selected');
+                        selectedPlayers.push(playerName);
+                    }
+                    
+                    updateSelectedPlayersList();
+                    
+                    if (selectedPlayers.length > 0) {
+                        document.getElementById('selectedPlayersContainer').style.display = 'block';
+                    } else {
+                        document.getElementById('selectedPlayersContainer').style.display = 'none';
+                    }
+                }
+            });
+        }
+        
+        function updateSelectedPlayersList() {
+            const selectedPlayersList = document.getElementById('selectedPlayersList');
+            selectedPlayersList.innerHTML = '';
+            
+            selectedPlayers.forEach(player => {
+                const playerItem = document.createElement('div');
+                playerItem.className = 'selected-player-item';
+                playerItem.textContent = player;
+                playerItem.setAttribute('data-player', player);
+                
+                playerItem.addEventListener('click', function() {
+                    selectedPlayers = selectedPlayers.filter(p => p !== player);
+                    updateSelectedPlayersList();
+                    
+                    const playerCards = document.querySelectorAll('.player-card');
+                    playerCards.forEach(card => {
+                        if (card.textContent.trim() === player) {
+                            card.classList.remove('selected');
+                        }
+                    });
+                    
+                    if (selectedPlayers.length === 0) {
+                        document.getElementById('selectedPlayersContainer').style.display = 'none';
+                    }
                 });
                 
-                showNotification('Ahora haz clic en una posición para asignar los jugadores seleccionados');
+                selectedPlayersList.appendChild(playerItem);
+            });
+        }
+        
+        function assignSelectedPlayersToPosition(positionEl) {
+            const positionId = positionEl.getAttribute('data-position');
+            
+            if (positionId !== "BD") {
+                if (selectedPlayers.length > 1) {
+                    showNotification('Solo puedes asignar un jugador a esta posición');
+                    return;
+                }
+                
+                const playerName = selectedPlayers[0];
+                assignSinglePlayerToPosition(playerName, positionEl);
+            } else {
+                selectedPlayers.forEach(playerName => {
+                    assignSinglePlayerToPosition(playerName, positionEl);
+                });
             }
             
-            function autoAssign() {
-                clearAssignments();
-                
+            clearSelectedPlayers();
+        }
+        
+        function assignPlayerToPosition(playerCard, positionEl) {
+            const playerName = playerCard.textContent.trim();
+            assignSinglePlayerToPosition(playerName, positionEl);
+            
+            playerCard.classList.remove('selected');
+            selectedPlayer = null;
+            
+            document.querySelectorAll('.position').forEach(pos => {
+                pos.classList.remove('highlight');
+            });
+        }
+        
+        function assignSinglePlayerToPosition(playerName, positionEl) {
+            const positionId = positionEl.getAttribute('data-position');
+            
+            if (positionId === "BD") {
+                document.getElementById('bdBox').style.display = 'block';
+                document.getElementById('bdPlayer').textContent = playerName;
+            }
+            
+            const existingPlayerName = teamData.positions[positionId];
+            if (existingPlayerName) {
                 const playerCards = document.querySelectorAll('.player-card');
+                for (let card of playerCards) {
+                    if (card.textContent.trim() === existingPlayerName && card.style.display === 'none') {
+                        card.style.display = 'block';
+                        break;
+                    }
+                }
+            }
+            
+            positionEl.innerHTML = `<div>${positionEl.id.replace('pos-', '')}</div><small>${playerName}</small>`;
+            positionEl.classList.add('assigned');
+            
+            teamData.positions[positionId] = playerName;
+            
+            const playerCards = document.querySelectorAll('.player-card');
+            for (let card of playerCards) {
+                if (card.textContent.trim() === playerName) {
+                    card.style.display = 'none';
+                    break;
+                }
+            }
+            
+            updateBench();
+            
+            showNotification(`¡${playerName} asignado a ${positionId}!`);
+        }
+        
+        function clearSelectedPlayers() {
+            selectedPlayers = [];
+            
+            document.querySelectorAll('.player-card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            document.getElementById('selectedPlayersContainer').style.display = 'none';
+        }
+        
+        function assignSelectedToPosition() {
+            if (selectedPlayers.length === 0) {
+                showNotification('No hay jugadores seleccionados');
+                return;
+            }
+            
+            document.querySelectorAll('.position').forEach(pos => {
+                pos.classList.add('highlight');
+            });
+            
+            showNotification('Ahora haz clic en una posición para asignar los jugadores seleccionados');
+        }
+        
+        function autoAssign() {
+            clearAssignments();
+            
+            const playerCards = document.querySelectorAll('.player-card');
+            
+            const positionsToAssign = teamData.category === "Lineup Infantil" ? 9 : 10;
+            
+            for (let i = 0; i < Math.min(positionsToAssign, playerCards.length); i++) {
+                const playerCard = playerCards[i];
+                const positionEl = document.getElementById(`pos-${fieldPositions[i].id}`);
                 
-                const positionsToAssign = teamData.category === "Lineup Infantil" ? 9 : 10;
+                if (positionEl) {
+                    assignPlayerToPosition(playerCard, positionEl);
+                }
+            }
+            
+            updateBench();
+            
+            showNotification('Asignación automática completada');
+        }
+        
+        function clearAssignments() {
+            document.querySelectorAll('.position').forEach(positionEl => {
+                const positionId = positionEl.getAttribute('data-position');
+                positionEl.innerHTML = `<div>${positionId}</div><small>Sin asignar</small>`;
+                positionEl.classList.remove('assigned');
                 
-                for (let i = 0; i < Math.min(positionsToAssign, playerCards.length); i++) {
-                    const playerCard = playerCards[i];
-                    const positionEl = document.getElementById(`pos-${fieldPositions[i].id}`);
+                delete teamData.positions[positionId];
+            });
+            
+            document.querySelectorAll('.player-card').forEach(card => {
+                card.style.display = 'block';
+                card.classList.remove('selected');
+            });
+            
+            selectedPlayer = null;
+            clearSelectedPlayers();
+            
+            document.getElementById('bdBox').style.display = 'none';
+            document.getElementById('bdPlayer').textContent = 'Sin asignar';
+            
+            updateBench();
+            
+            showNotification('Todas las asignaciones han sido limpiadas');
+        }
+        
+        function updateBench() {
+            const benchContainer = document.getElementById('benchPlayers');
+            benchContainer.innerHTML = '';
+            
+            const assignedPlayers = Object.values(teamData.positions);
+            
+            teamData.bench = teamData.players.filter(player => 
+                !assignedPlayers.includes(player) && player !== teamData.positions["BD"]
+            );
+            
+            teamData.bench.forEach(player => {
+                const benchPlayer = document.createElement('div');
+                benchPlayer.className = 'bench-player non-draggable';
+                benchPlayer.textContent = player;
+                benchContainer.appendChild(benchPlayer);
+            });
+        }
+        
+        function nextStep(step) {
+            if (step === 2 && !validateStep1()) return;
+            if (step === 3 && !validateStep2()) return;
+            if (step === 4 && !validateStep3()) return;
+            if (step === 5 && !validateStep4()) return;
+            
+            document.querySelector('.step-content.active').classList.remove('active');
+            
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            updateStepIndicator(step);
+            
+            if (step === 3) {
+                generatePlayerCards();
+                generateFieldPositions();
+            }
+            
+            if (step === 4) {
+                generateLineupCard();
+            }
+            
+            if (step === 5) {
+                generatePDFPreview();
+            }
+            
+            scrollToTop();
+        }
+        
+        function prevStep(step) {
+            document.querySelector('.step-content.active').classList.remove('active');
+            
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            updateStepIndicator(step);
+            
+            scrollToTop();
+        }
+        
+        function updateStepIndicator(currentStep) {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+        }
+        
+        function validateStep1() {
+            const teamName = document.getElementById('teamName').value.trim();
+            const coach = document.getElementById('coach').value.trim();
+            const category = document.getElementById('category').value;
+            const date = document.getElementById('date').value;
+            const today = new Date().toISOString().split('T')[0];
+            
+            let isValid = true;
+            
+            if (!teamName) {
+                document.getElementById('teamNameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('teamNameError').style.display = 'none';
+            }
+            
+            if (!coach) {
+                document.getElementById('coachError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('coachError').style.display = 'none';
+            }
+            
+            if (!category) {
+                document.getElementById('categoryError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('categoryError').style.display = 'none';
+            }
+            
+            if (!date) {
+                document.getElementById('dateError').textContent = 'La fecha es obligatoria';
+                document.getElementById('dateError').style.display = 'block';
+                isValid = false;
+            } else if (date > today) {
+                document.getElementById('dateError').textContent = 'La fecha no puede ser futura';
+                document.getElementById('dateError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('dateError').style.display = 'none';
+            }
+            
+            if (!isValid) {
+                const firstError = document.querySelector('.error-message[style="display: block;"]');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return false;
+            }
+            
+            teamData.name = teamName;
+            teamData.coach = coach;
+            teamData.category = category;
+            teamData.date = date;
+            
+            return true;
+        }
+        
+        function validateStep2() {
+            const players = [];
+            let filledCount = 0;
+            
+            for (let i = 1; i <= 15; i++) {
+                const player = document.getElementById(`player${i}`).value.trim();
+                if (player) {
+                    players.push(player);
+                    filledCount++;
+                }
+            }
+            
+            if (filledCount < 10) {
+                alert('Debes ingresar al menos 10 jugadores.');
+                return false;
+            }
+            
+            teamData.players = players;
+            
+            return true;
+        }
+        
+        function validateStep3() {
+            const requiredPositions = teamData.category === "Lineup Infantil" ? 9 : 10;
+            const assignedPositions = Object.keys(teamData.positions).length;
+            
+            if (assignedPositions < requiredPositions) {
+                alert(`Por favor, asigna jugadores a todas las posiciones principales. Faltan ${requiredPositions - assignedPositions} posiciones.`);
+                return false;
+            }
+            
+            if (teamData.category === "Lineup Profesional" && !teamData.positions["BD"]) {
+                alert('Debes asignar un jugador al Bateador Designado (BD) antes de continuar.');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function validateStep4() {
+            if (teamData.category === "Lineup Infantil") {
+                if (teamData.battingOrder.filter(p => p !== null).length !== teamData.players.length) {
+                    alert('En Lineup Infantil, todos los jugadores deben estar en el orden de bateo.');
+                    return false;
+                }
+            } else {
+                if (teamData.battingOrder.filter(p => p !== null).length < 10) {
+                    alert('Debes asignar al menos 10 jugadores al orden de bateo (incluyendo el Pitcher).');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        function generatePlayerCards() {
+            const playerList = document.getElementById('playerList');
+            playerList.innerHTML = '';
+            
+            teamData.players.forEach((player, index) => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                playerCard.id = `playerCard${index + 1}`;
+                playerCard.innerHTML = `<div>${player}</div>`;
+                playerList.appendChild(playerCard);
+            });
+            
+            selectedPlayer = null;
+            clearSelectedPlayers();
+        }
+        
+        function generateLineupCard() {
+            document.getElementById('lineupTeamName').textContent = teamData.name;
+            document.getElementById('lineupDate').textContent = teamData.date;
+            document.getElementById('lineupTeamNameTable').textContent = teamData.name;
+            document.getElementById('lineupCoach').textContent = teamData.coach;
+            document.getElementById('lineupCategory').textContent = teamData.category;
+            document.getElementById('lineupDateTable').textContent = teamData.date;
+            
+            const battingOrder = document.getElementById('battingOrder');
+            battingOrder.innerHTML = '';
+            
+            if (teamData.category === "Lineup Infantil") {
+                teamData.battingOrder = [...teamData.players];
+                
+                for (let i = 0; i < teamData.players.length; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'batting-slot';
+                    slot.id = `batting-slot-${i}`;
+                    slot.setAttribute('data-slot', i);
                     
-                    if (positionEl) {
-                        assignPlayerToPosition(playerCard, positionEl);
-                    }
-                }
-                
-                updateBench();
-                
-                showNotification('Asignación automática completada');
-            }
-            
-            function clearAssignments() {
-                document.querySelectorAll('.position').forEach(positionEl => {
-                    const positionId = positionEl.getAttribute('data-position');
-                    positionEl.innerHTML = `<div>${positionId}</div><small>Sin asignar</small>`;
-                    positionEl.classList.remove('assigned');
+                    const playerName = teamData.battingOrder[i];
+                    const slotNumber = i < 9 ? (i + 1).toString() : (i === 9 ? "P" : (i + 1).toString());
                     
-                    delete teamData.positions[positionId];
-                });
-                
-                document.querySelectorAll('.player-card').forEach(card => {
-                    card.style.display = 'block';
-                    card.classList.remove('selected');
-                });
-                
-                selectedPlayer = null;
-                clearSelectedPlayers();
-                
-                document.getElementById('bdBox').style.display = 'none';
-                document.getElementById('bdPlayer').textContent = 'Sin asignar';
-                
-                updateBench();
-                
-                showNotification('Todas las asignaciones han sido limpiadas');
-            }
-            
-            function updateBench() {
-                const benchContainer = document.getElementById('benchPlayers');
-                benchContainer.innerHTML = '';
-                
-                const assignedPlayers = Object.values(teamData.positions);
-                
-                teamData.bench = teamData.players.filter(player => 
-                    !assignedPlayers.includes(player) && player !== teamData.positions["BD"]
-                );
-                
-                teamData.bench.forEach(player => {
-                    const benchPlayer = document.createElement('div');
-                    benchPlayer.className = 'bench-player non-draggable';
-                    benchPlayer.textContent = player;
-                    benchContainer.appendChild(benchPlayer);
-                });
-            }
-            
-            function nextStep(step) {
-                if (step === 2 && !validateStep1()) return;
-                if (step === 3 && !validateStep2()) return;
-                if (step === 4 && !validateStep3()) return;
-                if (step === 5 && !validateStep4()) return;
-                
-                document.querySelector('.step-content.active').classList.remove('active');
-                
-                document.getElementById(`step${step}`).classList.add('active');
-                
-                updateStepIndicator(step);
-                
-                if (step === 3) {
-                    generatePlayerCards();
-                    generateFieldPositions();
-                }
-                
-                if (step === 4) {
-                    generateLineupCard();
-                }
-                
-                if (step === 5) {
-                    generatePDFPreview();
-                }
-                
-                scrollToTop();
-            }
-            
-            function prevStep(step) {
-                document.querySelector('.step-content.active').classList.remove('active');
-                
-                document.getElementById(`step${step}`).classList.add('active');
-                
-                updateStepIndicator(step);
-                
-                scrollToTop();
-            }
-            
-            function updateStepIndicator(currentStep) {
-                const steps = document.querySelectorAll('.step');
-                steps.forEach((step, index) => {
-                    step.classList.remove('active', 'completed');
-                    if (index + 1 === currentStep) {
-                        step.classList.add('active');
-                    } else if (index + 1 < currentStep) {
-                        step.classList.add('completed');
-                    }
-                });
-            }
-            
-            function validateStep1() {
-                const teamName = document.getElementById('teamName').value.trim();
-                const coach = document.getElementById('coach').value.trim();
-                const category = document.getElementById('category').value;
-                const date = document.getElementById('date').value;
-                const today = new Date().toISOString().split('T')[0];
-                
-                let isValid = true;
-                
-                if (!teamName) {
-                    document.getElementById('teamNameError').style.display = 'block';
-                    isValid = false;
-                } else {
-                    document.getElementById('teamNameError').style.display = 'none';
-                }
-                
-                if (!coach) {
-                    document.getElementById('coachError').style.display = 'block';
-                    isValid = false;
-                } else {
-                    document.getElementById('coachError').style.display = 'none';
-                }
-                
-                if (!category) {
-                    document.getElementById('categoryError').style.display = 'block';
-                    isValid = false;
-                } else {
-                    document.getElementById('categoryError').style.display = 'none';
-                }
-                
-                if (!date) {
-                    document.getElementById('dateError').textContent = 'La fecha es obligatoria';
-                    document.getElementById('dateError').style.display = 'block';
-                    isValid = false;
-                } else if (date > today) {
-                    document.getElementById('dateError').textContent = 'La fecha no puede ser futura';
-                    document.getElementById('dateError').style.display = 'block';
-                    isValid = false;
-                } else {
-                    document.getElementById('dateError').style.display = 'none';
-                }
-                
-                if (!isValid) {
-                    const firstError = document.querySelector('.error-message[style="display: block;"]');
-                    if (firstError) {
-                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                    return false;
-                }
-                
-                teamData.name = teamName;
-                teamData.coach = coach;
-                teamData.category = category;
-                teamData.date = date;
-                
-                return true;
-            }
-            
-            function validateStep2() {
-                const players = [];
-                let filledCount = 0;
-                
-                for (let i = 1; i <= 15; i++) {
-                    const player = document.getElementById(`player${i}`).value.trim();
-                    if (player) {
-                        players.push(player);
-                        filledCount++;
-                    }
-                }
-                
-                if (filledCount < 10) {
-                    alert('Debes ingresar al menos 10 jugadores.');
-                    return false;
-                }
-                
-                teamData.players = players;
-                
-                return true;
-            }
-            
-            function validateStep3() {
-                const requiredPositions = teamData.category === "Lineup Infantil" ? 9 : 10;
-                const assignedPositions = Object.keys(teamData.positions).length;
-                
-                if (assignedPositions < requiredPositions) {
-                    alert(`Por favor, asigna jugadores a todas las posiciones principales. Faltan ${requiredPositions - assignedPositions} posiciones.`);
-                    return false;
-                }
-                
-                if (teamData.category === "Lineup Profesional" && !teamData.positions["BD"]) {
-                    alert('Debes asignar un jugador al Bateador Designado (BD) antes de continuar.');
-                    return false;
-                }
-                
-                return true;
-            }
-            
-            function validateStep4() {
-                if (teamData.category === "Lineup Infantil") {
-                    if (teamData.battingOrder.filter(p => p !== null).length !== teamData.players.length) {
-                        alert('En Lineup Infantil, todos los jugadores deben estar en el orden de bateo.');
-                        return false;
-                    }
-                } else {
-                    if (teamData.battingOrder.filter(p => p !== null).length < 10) {
-                        alert('Debes asignar al menos 10 jugadores al orden de bateo (incluyendo el Pitcher).');
-                        return false;
-                    }
-                }
-                
-                return true;
-            }
-            
-            function generatePlayerCards() {
-                const playerList = document.getElementById('playerList');
-                playerList.innerHTML = '';
-                
-                teamData.players.forEach((player, index) => {
-                    const playerCard = document.createElement('div');
-                    playerCard.className = 'player-card';
-                    playerCard.id = `playerCard${index + 1}`;
-                    playerCard.innerHTML = `<div>${player}</div>`;
-                    playerList.appendChild(playerCard);
-                });
-                
-                selectedPlayer = null;
-                clearSelectedPlayers();
-            }
-            
-            function generateLineupCard() {
-                document.getElementById('lineupTeamName').textContent = teamData.name;
-                document.getElementById('lineupDate').textContent = teamData.date;
-                document.getElementById('lineupTeamNameTable').textContent = teamData.name;
-                document.getElementById('lineupCoach').textContent = teamData.coach;
-                document.getElementById('lineupCategory').textContent = teamData.category;
-                document.getElementById('lineupDateTable').textContent = teamData.date;
-                
-                const battingOrder = document.getElementById('battingOrder');
-                battingOrder.innerHTML = '';
-                
-                if (teamData.category === "Lineup Infantil") {
-                    teamData.battingOrder = [...teamData.players];
-                    
-                    for (let i = 0; i < teamData.players.length; i++) {
-                        const slot = document.createElement('div');
-                        slot.className = 'batting-slot';
-                        slot.id = `batting-slot-${i}`;
-                        slot.setAttribute('data-slot', i);
-                        
-                        const playerName = teamData.battingOrder[i];
-                        const slotNumber = i < 9 ? (i + 1).toString() : (i === 9 ? "P" : (i + 1).toString());
-                        
-                        let playerPosition = "-";
-                        if (playerName) {
-                            for (const [pos, name] of Object.entries(teamData.positions)) {
-                                if (name === playerName) {
-                                    playerPosition = pos;
-                                    break;
-                                }
+                    let playerPosition = "-";
+                    if (playerName) {
+                        for (const [pos, name] of Object.entries(teamData.positions)) {
+                            if (name === playerName) {
+                                playerPosition = pos;
+                                break;
                             }
                         }
-                        
-                        slot.innerHTML = `
-                            <div class="slot-number">${slotNumber}</div>
-                            <div class="slot-player" id="slot-player-${i}">
-                                ${playerName ? `${playerName} (${playerPosition})` : '- Vacío -'}
-                            </div>
-                            <div class="mobile-drag-handle"><i class="fas fa-grip-lines"></i></div>
-                        `;
-                        
+                    }
+                    
+                    slot.innerHTML = `
+                        <div class="slot-number">${slotNumber}</div>
+                        <div class="slot-player" id="slot-player-${i}">
+                            ${playerName ? `${playerName} (${playerPosition})` : '- Vacío -'}
+                        </div>
+                        <div class="mobile-drag-handle"><i class="fas fa-grip-lines"></i></div>
+                    `;
+                    
+                    slot.setAttribute('draggable', 'true');
+                    slot.classList.add('draggable');
+                    
+                    battingOrder.appendChild(slot);
+                    
+                    setupDragAndDrop(slot);
+                }
+                
+                document.getElementById('benchLineupSection').style.display = 'none';
+                
+            } else {
+                teamData.battingOrder = [];
+                
+                const fieldPlayers = [];
+                fieldPositions.forEach(pos => {
+                    if (pos.id !== "P" && teamData.positions[pos.id]) {
+                        fieldPlayers.push({
+                            position: pos.id,
+                            player: teamData.positions[pos.id],
+                            number: pos.name.match(/\d+/)?.[0] || "BD"
+                        });
+                    }
+                });
+                
+                fieldPlayers.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+                
+                for (let i = 0; i < 9; i++) {
+                    const playerData = fieldPlayers[i];
+                    teamData.battingOrder[i] = playerData ? playerData.player : null;
+                }
+                
+                teamData.battingOrder[9] = teamData.positions["P"] || null;
+                
+                for (let i = 0; i < 10; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'batting-slot';
+                    slot.id = `batting-slot-${i}`;
+                    slot.setAttribute('data-slot', i);
+                    
+                    const playerName = teamData.battingOrder[i];
+                    const slotNumber = battingOrderNumbers[i];
+                    
+                    let playerPosition = "";
+                    if (playerName) {
+                        for (const [pos, name] of Object.entries(teamData.positions)) {
+                            if (name === playerName) {
+                                playerPosition = pos;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    slot.innerHTML = `
+                        <div class="slot-number">${slotNumber}</div>
+                        <div class="slot-player" id="slot-player-${i}">
+                            ${playerName ? `${playerName} (${playerPosition})` : '- Vacío -'}
+                        </div>
+                        <div class="mobile-drag-handle"><i class="fas fa-grip-lines"></i></div>
+                    `;
+                    
+                    if (slotNumber === "P" && teamData.category !== "Lineup Infantil") {
+                        slot.style.backgroundColor = "#f0f8ff"; 
+                        slot.style.cursor = "not-allowed";
+                    } else {
                         slot.setAttribute('draggable', 'true');
                         slot.classList.add('draggable');
-                        
-                        battingOrder.appendChild(slot);
-                        
-                        setupDragAndDrop(slot);
                     }
                     
-                    document.getElementById('benchLineupSection').style.display = 'none';
+                    battingOrder.appendChild(slot);
                     
-                } else {
-                    teamData.battingOrder = [];
+                    setupDragAndDrop(slot);
+                }
+                
+                document.getElementById('benchLineupSection').style.display = 'block';
+                
+                const benchLineup = document.getElementById('benchLineup');
+                benchLineup.innerHTML = '';
+                
+                const assignedPlayers = Object.values(teamData.positions);
+                const availablePlayers = teamData.players.filter(player => 
+                    !assignedPlayers.includes(player)
+                );
+                
+                teamData.benchLineup = [...availablePlayers];
+                
+                availablePlayers.forEach((player, index) => {
+                    const benchSlot = document.createElement('div');
+                    benchSlot.className = 'bench-slot';
+                    benchSlot.id = `bench-slot-${index}`;
                     
-                    const fieldPlayers = [];
-                    fieldPositions.forEach(pos => {
-                        if (pos.id !== "P" && teamData.positions[pos.id]) {
-                            fieldPlayers.push({
-                                position: pos.id,
-                                player: teamData.positions[pos.id],
-                                number: pos.name.match(/\d+/)?.[0] || "BD"
-                            });
-                        }
-                    });
+                    const playerItem = document.createElement('div');
+                    playerItem.className = 'player-item draggable';
+                    playerItem.textContent = player;
+                    playerItem.setAttribute('data-player', player);
+                    playerItem.setAttribute('draggable', 'true');
                     
-                    fieldPlayers.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+                    benchSlot.appendChild(playerItem);
+                    benchLineup.appendChild(benchSlot);
                     
-                    for (let i = 0; i < 9; i++) {
-                        const playerData = fieldPlayers[i];
-                        teamData.battingOrder[i] = playerData ? playerData.player : null;
-                    }
-                    
-                    teamData.battingOrder[9] = teamData.positions["P"] || null;
-                    
-                    for (let i = 0; i < 10; i++) {
-                        const slot = document.createElement('div');
-                        slot.className = 'batting-slot';
-                        slot.id = `batting-slot-${i}`;
-                        slot.setAttribute('data-slot', i);
+                    setupBenchDragAndDrop(playerItem);
+                });
+            }
+        }
+        
+        function setupDragAndDrop(element) {
+            element.addEventListener('dragstart', function(e) {
+                if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
+                    e.preventDefault();
+                    return;
+                }
+                
+                this.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', this.id);
+                e.dataTransfer.setData('type', 'batting-slot');
+            });
+            
+            element.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                document.querySelectorAll('.batting-slot').forEach(slot => {
+                    slot.classList.remove('drag-over');
+                });
+                document.querySelectorAll('.bench-slot').forEach(slot => {
+                    slot.classList.remove('drag-over');
+                });
+            });
+            
+            element.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
+                    return;
+                }
+                this.classList.add('drag-over');
+            });
+            
+            element.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+            
+            element.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
+                    return;
+                }
+                
+                const draggedId = e.dataTransfer.getData('text/plain');
+                const draggedElement = document.getElementById(draggedId);
+                const dragType = e.dataTransfer.getData('type');
+                
+                if (draggedElement && draggedElement !== this) {
+                    if (dragType === 'batting-slot') {
+                        const fromSlot = parseInt(draggedElement.getAttribute('data-slot'));
+                        const toSlot = parseInt(this.getAttribute('data-slot'));
                         
-                        const playerName = teamData.battingOrder[i];
-                        const slotNumber = battingOrderNumbers[i];
+                        const tempPlayer = teamData.battingOrder[fromSlot];
+                        teamData.battingOrder[fromSlot] = teamData.battingOrder[toSlot];
+                        teamData.battingOrder[toSlot] = tempPlayer;
                         
-                        let playerPosition = "";
-                        if (playerName) {
+                        let fromPlayerPosition = "";
+                        let toPlayerPosition = "";
+                        
+                        if (teamData.battingOrder[fromSlot]) {
                             for (const [pos, name] of Object.entries(teamData.positions)) {
-                                if (name === playerName) {
-                                    playerPosition = pos;
+                                if (name === teamData.battingOrder[fromSlot]) {
+                                    fromPlayerPosition = pos;
                                     break;
                                 }
                             }
                         }
                         
-                        slot.innerHTML = `
-                            <div class="slot-number">${slotNumber}</div>
-                            <div class="slot-player" id="slot-player-${i}">
-                                ${playerName ? `${playerName} (${playerPosition})` : '- Vacío -'}
-                            </div>
-                            <div class="mobile-drag-handle"><i class="fas fa-grip-lines"></i></div>
-                        `;
-                        
-                        if (slotNumber === "P" && teamData.category !== "Lineup Infantil") {
-                            slot.style.backgroundColor = "#f0f8ff"; 
-                            slot.style.cursor = "not-allowed";
-                        } else {
-                            slot.setAttribute('draggable', 'true');
-                            slot.classList.add('draggable');
+                        if (teamData.battingOrder[toSlot]) {
+                            for (const [pos, name] of Object.entries(teamData.positions)) {
+                                if (name === teamData.battingOrder[toSlot]) {
+                                    toPlayerPosition = pos;
+                                    break;
+                                }
+                            }
                         }
                         
-                        battingOrder.appendChild(slot);
+                        document.getElementById(`slot-player-${fromSlot}`).textContent = 
+                            teamData.battingOrder[fromSlot] ? 
+                            `${teamData.battingOrder[fromSlot]} (${fromPlayerPosition})` : 
+                            '- Vacío -';
+                        document.getElementById(`slot-player-${toSlot}`).textContent = 
+                            teamData.battingOrder[toSlot] ? 
+                            `${teamData.battingOrder[toSlot]} (${toPlayerPosition})` : 
+                            '- Vacío -';
                         
-                        setupDragAndDrop(slot);
+                        showNotification('Orden de bateo actualizado');
                     }
-                    
-                    document.getElementById('benchLineupSection').style.display = 'block';
-                    
-                    const benchLineup = document.getElementById('benchLineup');
-                    benchLineup.innerHTML = '';
-                    
-                    const assignedPlayers = Object.values(teamData.positions);
-                    const availablePlayers = teamData.players.filter(player => 
-                        !assignedPlayers.includes(player)
-                    );
-                    
-                    teamData.benchLineup = [...availablePlayers];
-                    
-                    availablePlayers.forEach((player, index) => {
-                        const benchSlot = document.createElement('div');
-                        benchSlot.className = 'bench-slot';
-                        benchSlot.id = `bench-slot-${index}`;
-                        
-                        const playerItem = document.createElement('div');
-                        playerItem.className = 'player-item draggable';
-                        playerItem.textContent = player;
-                        playerItem.setAttribute('data-player', player);
-                        playerItem.setAttribute('draggable', 'true');
-                        
-                        benchSlot.appendChild(playerItem);
-                        benchLineup.appendChild(benchSlot);
-                        
-                        setupBenchDragAndDrop(playerItem);
-                    });
                 }
-            }
+            });
+        }
+        
+        function setupBenchDragAndDrop(element) {
+            element.setAttribute('draggable', 'true');
+            element.classList.add('draggable');
             
-            function setupDragAndDrop(element) {
-                element.addEventListener('dragstart', function(e) {
-                    if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
-                        e.preventDefault();
-                        return;
-                    }
-                    
-                    this.classList.add('dragging');
-                    e.dataTransfer.setData('text/plain', this.id);
-                    e.dataTransfer.setData('type', 'batting-slot');
+            element.addEventListener('dragstart', function(e) {
+                this.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', this.textContent);
+                e.dataTransfer.setData('type', 'bench-player');
+            });
+            
+            element.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                document.querySelectorAll('.batting-slot').forEach(slot => {
+                    slot.classList.remove('drag-over');
                 });
-                
-                element.addEventListener('dragend', function() {
-                    this.classList.remove('dragging');
-                    document.querySelectorAll('.batting-slot').forEach(slot => {
-                        slot.classList.remove('drag-over');
-                    });
-                    document.querySelectorAll('.bench-slot').forEach(slot => {
-                        slot.classList.remove('drag-over');
-                    });
+                document.querySelectorAll('.bench-slot').forEach(slot => {
+                    slot.classList.remove('drag-over');
                 });
-                
-                element.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
-                        return;
-                    }
-                    this.classList.add('drag-over');
-                });
-                
-                element.addEventListener('dragleave', function() {
-                    this.classList.remove('drag-over');
-                });
-                
-                element.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('drag-over');
-                    
-                    if (this.querySelector('.slot-number').textContent === "P" && teamData.category !== "Lineup Infantil") {
-                        return;
-                    }
-                    
-                    const draggedId = e.dataTransfer.getData('text/plain');
-                    const draggedElement = document.getElementById(draggedId);
-                    const dragType = e.dataTransfer.getData('type');
-                    
-                    if (draggedElement && draggedElement !== this) {
-                        if (dragType === 'batting-slot') {
-                            const fromSlot = parseInt(draggedElement.getAttribute('data-slot'));
-                            const toSlot = parseInt(this.getAttribute('data-slot'));
-                            
-                            const tempPlayer = teamData.battingOrder[fromSlot];
-                            teamData.battingOrder[fromSlot] = teamData.battingOrder[toSlot];
-                            teamData.battingOrder[toSlot] = tempPlayer;
-                            
-                            let fromPlayerPosition = "";
-                            let toPlayerPosition = "";
-                            
-                            if (teamData.battingOrder[fromSlot]) {
-                                for (const [pos, name] of Object.entries(teamData.positions)) {
-                                    if (name === teamData.battingOrder[fromSlot]) {
-                                        fromPlayerPosition = pos;
-                                        break;
-                                    }
-                                }
+            });
+        }
+        
+        function generatePDFPreview() {
+            const pdfPreview = document.getElementById('pdfPreview');
+            
+            let battingOrderHTML = '';
+            
+            if (teamData.category === "Lineup Infantil") {
+                teamData.battingOrder.forEach((player, index) => {
+                    let playerPosition = "-";
+                    if (player) {
+                        for (const [pos, name] of Object.entries(teamData.positions)) {
+                            if (name === player) {
+                                playerPosition = pos;
+                                break;
                             }
-                            
-                            if (teamData.battingOrder[toSlot]) {
-                                for (const [pos, name] of Object.entries(teamData.positions)) {
-                                    if (name === teamData.battingOrder[toSlot]) {
-                                        toPlayerPosition = pos;
-                                        break;
-                                    }
-                                }
-                            }
-                            
-                            document.getElementById(`slot-player-${fromSlot}`).textContent = 
-                                teamData.battingOrder[fromSlot] ? 
-                                `${teamData.battingOrder[fromSlot]} (${fromPlayerPosition})` : 
-                                '- Vacío -';
-                            document.getElementById(`slot-player-${toSlot}`).textContent = 
-                                teamData.battingOrder[toSlot] ? 
-                                `${teamData.battingOrder[toSlot]} (${toPlayerPosition})` : 
-                                '- Vacío -';
-                            
-                            showNotification('Orden de bateo actualizado');
                         }
                     }
+                    
+                    const slotNumber = index < 9 ? (index + 1).toString() : (index === 9 ? "P" : (index + 1).toString());
+                    
+                    battingOrderHTML += `
+                        <tr>
+                            <td>${slotNumber}</td>
+                            <td>${player || ''}</td>
+                            <td>${playerPosition}</td>
+                        </tr>
+                    `;
                 });
-            }
-            
-            function setupBenchDragAndDrop(element) {
-                element.setAttribute('draggable', 'true');
-                element.classList.add('draggable');
-                
-                element.addEventListener('dragstart', function(e) {
-                    this.classList.add('dragging');
-                    e.dataTransfer.setData('text/plain', this.textContent);
-                    e.dataTransfer.setData('type', 'bench-player');
-                });
-                
-                element.addEventListener('dragend', function() {
-                    this.classList.remove('dragging');
-                    document.querySelectorAll('.batting-slot').forEach(slot => {
-                        slot.classList.remove('drag-over');
-                    });
-                    document.querySelectorAll('.bench-slot').forEach(slot => {
-                        slot.classList.remove('drag-over');
-                    });
-                });
-            }
-            
-            function generatePDFPreview() {
-                const pdfPreview = document.getElementById('pdfPreview');
-                
-                let battingOrderHTML = '';
-                
-                if (teamData.category === "Lineup Infantil") {
-                    teamData.battingOrder.forEach((player, index) => {
-                        let playerPosition = "-";
+            } else {
+                teamData.battingOrder.forEach((player, index) => {
+                    if (index < battingOrderNumbers.length) {
+                        let playerPosition = "";
                         if (player) {
                             for (const [pos, name] of Object.entries(teamData.positions)) {
                                 if (name === player) {
@@ -2265,290 +2288,264 @@
                             }
                         }
                         
-                        const slotNumber = index < 9 ? (index + 1).toString() : (index === 9 ? "P" : (index + 1).toString());
-                        
                         battingOrderHTML += `
                             <tr>
-                                <td>${slotNumber}</td>
+                                <td>${battingOrderNumbers[index]}</td>
                                 <td>${player || ''}</td>
-                                <td>${playerPosition}</td>
+                                <td>${playerPosition || ''}</td>
                             </tr>
                         `;
-                    });
-                } else {
-                    teamData.battingOrder.forEach((player, index) => {
-                        if (index < battingOrderNumbers.length) {
-                            let playerPosition = "";
-                            if (player) {
-                                for (const [pos, name] of Object.entries(teamData.positions)) {
-                                    if (name === player) {
-                                        playerPosition = pos;
-                                        break;
-                                    }
-                                }
-                            }
-                            
-                            battingOrderHTML += `
+                    }
+                });
+            }
+            
+            let benchHTML = '';
+            if (teamData.category === "Lineup Profesional" && teamData.benchLineup.length > 0) {
+                benchHTML = `
+                    <div class="pdf-bench">
+                        <h3>Jugadores de Reserva</h3>
+                        <table class="table-optimized">
+                            <thead>
                                 <tr>
-                                    <td>${battingOrderNumbers[index]}</td>
-                                    <td>${player || ''}</td>
-                                    <td>${playerPosition || ''}</td>
+                                    <th>Orden</th>
+                                    <th>Jugador</th>
                                 </tr>
-                            `;
-                        }
-                    });
-                }
-                
-                let benchHTML = '';
-                if (teamData.category === "Lineup Profesional" && teamData.benchLineup.length > 0) {
-                    benchHTML = `
-                        <div class="pdf-bench">
-                            <h3>Jugadores de Reserva</h3>
-                            <table class="table-optimized">
-                                <thead>
+                            </thead>
+                            <tbody>
+                                ${teamData.benchLineup.map((player, index) => `
                                     <tr>
-                                        <th>Orden</th>
-                                        <th>Jugador</th>
+                                        <td>${index + 1}</td>
+                                        <td>${player}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    ${teamData.benchLineup.map((player, index) => `
-                                        <tr>
-                                            <td>${index + 1}</td>
-                                            <td>${player}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    `;
-                }
-                
-                pdfPreview.innerHTML = `
-                    <div class="pdf-header">
-                        <h1>${teamData.name}</h1>
-                        <p>Lineup Oficial - ${teamData.date}</p>
+                                `).join('')}
+                            </tbody>
+                        </table>
                     </div>
-                    
-                    <div class="pdf-lineup">
-                        <div class="pdf-batting-order">
-                            <h3>Orden de Bateo</h3>
-                            <table class="table-optimized">
-                                <thead>
-                                    <tr>
-                                        <th>Orden</th>
-                                        <th>Jugador</th>
-                                        <th>Posición</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${battingOrderHTML}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    ${benchHTML}
                 `;
-                
-                adjustTablesToContent();
             }
             
-            function adjustTablesToContent() {
-                const tables = document.querySelectorAll('.table-optimized');
+            pdfPreview.innerHTML = `
+                <div class="pdf-header">
+                    <h1>${teamData.name}</h1>
+                    <p>Lineup Oficial - ${teamData.date}</p>
+                </div>
                 
-                tables.forEach(table => {
-                    const colWidths = [];
-                    const rows = table.querySelectorAll('tr');
-                    
-                    rows.forEach(row => {
-                        const cells = row.querySelectorAll('th, td');
-                        cells.forEach((cell, index) => {
-                            const content = cell.textContent.trim();
-                            const contentWidth = content.length * 8;
-                            
-                            if (!colWidths[index] || contentWidth > colWidths[index]) {
-                                colWidths[index] = contentWidth;
-                            }
-                        });
-                    });
-                    
-                    const totalWidth = colWidths.reduce((sum, width) => sum + width, 0);
-                    const maxWidth = 700;
-                    
-                    if (totalWidth > maxWidth) {
-                        const scaleFactor = maxWidth / totalWidth;
-                        colWidths.forEach((width, index) => {
-                            colWidths[index] = Math.floor(width * scaleFactor);
-                        });
-                    }
-                    
-                    const headerRow = table.querySelector('tr');
-                    if (headerRow) {
-                        const headerCells = headerRow.querySelectorAll('th');
-                        headerCells.forEach((cell, index) => {
-                            if (colWidths[index]) {
-                                cell.style.width = `${colWidths[index]}px`;
-                                cell.style.minWidth = `${colWidths[index]}px`;
-                            }
-                        });
-                    }
-                });
-            }
+                <div class="pdf-lineup">
+                    <div class="pdf-batting-order">
+                        <h3>Orden de Bateo</h3>
+                        <table class="table-optimized">
+                            <thead>
+                                <tr>
+                                    <th>Orden</th>
+                                    <th>Jugador</th>
+                                    <th>Posición</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${battingOrderHTML}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                ${benchHTML}
+            `;
             
-            function generatePDF() {
-                const pdfPreview = document.getElementById('pdfPreview');
-                
-                showNotification('Generando PDF, por favor espera...');
-                
-                html2canvas(pdfPreview, {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    useCORS: true,
-                    onclone: function(clonedDoc) {
-                        const tables = clonedDoc.querySelectorAll('table');
-                        tables.forEach(table => {
-                            table.style.width = 'auto';
-                            table.style.borderCollapse = 'collapse';
-                        });
-                    }
-                }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-                    
-                    const imgWidth = 210;
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    
-                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                    pdf.save(`${teamData.name.replace(/\s+/g, '_')}_lineup_oficial.pdf`);
-                    
-                    showNotification('¡PDF profesional generado exitosamente!');
-                }).catch(error => {
-                    console.error('Error generando PDF:', error);
-                    showNotification('Error al generar el PDF. Intenta nuevamente.');
-                });
-            }
+            adjustTablesToContent();
+        }
+        
+        function adjustTablesToContent() {
+            const tables = document.querySelectorAll('.table-optimized');
             
-            function setupPositionDragAndDrop() {
-                const positions = document.querySelectorAll('.position');
+            tables.forEach(table => {
+                const colWidths = [];
+                const rows = table.querySelectorAll('tr');
                 
-                positions.forEach(position => {
-                    position.setAttribute('draggable', 'true');
-                    position.classList.add('draggable');
-                    
-                    position.addEventListener('dragstart', function(e) {
-                        if (!this.classList.contains('assigned')) {
-                            e.preventDefault();
-                            return;
-                        }
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('th, td');
+                    cells.forEach((cell, index) => {
+                        const content = cell.textContent.trim();
+                        const contentWidth = content.length * 8;
                         
-                        this.classList.add('dragging');
-                        e.dataTransfer.setData('text/plain', this.id);
-                        e.dataTransfer.setData('type', 'position');
+                        if (!colWidths[index] || contentWidth > colWidths[index]) {
+                            colWidths[index] = contentWidth;
+                        }
                     });
-                    
-                    position.addEventListener('dragend', function() {
-                        this.classList.remove('dragging');
-                        document.querySelectorAll('.position').forEach(pos => {
-                            pos.classList.remove('drag-over');
-                        });
+                });
+                
+                const totalWidth = colWidths.reduce((sum, width) => sum + width, 0);
+                const maxWidth = 700;
+                
+                if (totalWidth > maxWidth) {
+                    const scaleFactor = maxWidth / totalWidth;
+                    colWidths.forEach((width, index) => {
+                        colWidths[index] = Math.floor(width * scaleFactor);
                     });
-                    
-                    position.addEventListener('dragover', function(e) {
+                }
+                
+                const headerRow = table.querySelector('tr');
+                if (headerRow) {
+                    const headerCells = headerRow.querySelectorAll('th');
+                    headerCells.forEach((cell, index) => {
+                        if (colWidths[index]) {
+                            cell.style.width = `${colWidths[index]}px`;
+                            cell.style.minWidth = `${colWidths[index]}px`;
+                        }
+                    });
+                }
+            });
+        }
+        
+        function generatePDF() {
+            const pdfPreview = document.getElementById('pdfPreview');
+            
+            showNotification('Generando PDF, por favor espera...');
+            
+            html2canvas(pdfPreview, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                onclone: function(clonedDoc) {
+                    const tables = clonedDoc.querySelectorAll('table');
+                    tables.forEach(table => {
+                        table.style.width = 'auto';
+                        table.style.borderCollapse = 'collapse';
+                    });
+                }
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                
+                const imgWidth = 210;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                pdf.save(`${teamData.name.replace(/\s+/g, '_')}_lineup_oficial.pdf`);
+                
+                showNotification('¡PDF profesional generado exitosamente!');
+            }).catch(error => {
+                console.error('Error generando PDF:', error);
+                showNotification('Error al generar el PDF. Intenta nuevamente.');
+            });
+        }
+        
+        function setupPositionDragAndDrop() {
+            const positions = document.querySelectorAll('.position');
+            
+            positions.forEach(position => {
+                position.setAttribute('draggable', 'true');
+                position.classList.add('draggable');
+                
+                position.addEventListener('dragstart', function(e) {
+                    if (!this.classList.contains('assigned')) {
                         e.preventDefault();
-                        if (this.classList.contains('dragging')) {
-                            return;
-                        }
-                        this.classList.add('drag-over');
-                    });
-                    
-                    position.addEventListener('dragleave', function() {
-                        this.classList.remove('drag-over');
-                    });
-                    
-                    position.addEventListener('drop', function(e) {
-                        e.preventDefault();
-                        this.classList.remove('drag-over');
-                        
-                        const draggedId = e.dataTransfer.getData('text/plain');
-                        const draggedElement = document.getElementById(draggedId);
-                        const dragType = e.dataTransfer.getData('type');
-                        
-                        if (draggedElement && draggedElement !== this && dragType === 'position') {
-                            swapPlayersBetweenPositions(draggedElement, this);
-                        }
-                    });
-                });
-            }
-            
-            function swapPlayersBetweenPositions(pos1, pos2) {
-                const pos1Id = pos1.getAttribute('data-position');
-                const pos2Id = pos2.getAttribute('data-position');
-                
-                const player1 = teamData.positions[pos1Id];
-                const player2 = teamData.positions[pos2Id];
-                
-                teamData.positions[pos1Id] = player2;
-                teamData.positions[pos2Id] = player1;
-                
-                if (player1) {
-                    pos2.innerHTML = `<div>${pos2Id}</div><small>${player1}</small>`;
-                    pos2.classList.add('assigned');
-                } else {
-                    pos2.innerHTML = `<div>${pos2Id}</div><small>Sin asignar</small>`;
-                    pos2.classList.remove('assigned');
-                }
-                
-                if (player2) {
-                    pos1.innerHTML = `<div>${pos1Id}</div><small>${player2}</small>`;
-                    pos1.classList.add('assigned');
-                } else {
-                    pos1.innerHTML = `<div>${pos1Id}</div><small>Sin asignar</small>`;
-                    pos1.classList.remove('assigned');
-                }
-                
-                if (pos1Id === "BD" || pos2Id === "BD") {
-                    if (teamData.positions["BD"]) {
-                        document.getElementById('bdBox').style.display = 'block';
-                        document.getElementById('bdPlayer').textContent = teamData.positions["BD"];
-                    } else {
-                        document.getElementById('bdBox').style.display = 'none';
-                        document.getElementById('bdPlayer').textContent = 'Sin asignar';
+                        return;
                     }
-                }
-                
-                updateBench();
-                
-                showNotification(`Jugadores intercambiados entre ${pos1Id} y ${pos2Id}`);
-            }
-            
-            function improveMobileCompatibility() {
-                const interactiveElements = document.querySelectorAll('input, select, button, .player-card, .position');
-                interactiveElements.forEach(el => {
-                    el.classList.add('mobile-optimized');
+                    
+                    this.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', this.id);
+                    e.dataTransfer.setData('type', 'position');
                 });
                 
-                if ('ontouchstart' in window) {
-                    document.body.classList.add('touch-device');
+                position.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                    document.querySelectorAll('.position').forEach(pos => {
+                        pos.classList.remove('drag-over');
+                    });
+                });
+                
+                position.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    if (this.classList.contains('dragging')) {
+                        return;
+                    }
+                    this.classList.add('drag-over');
+                });
+                
+                position.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over');
+                });
+                
+                position.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    
+                    const draggedId = e.dataTransfer.getData('text/plain');
+                    const draggedElement = document.getElementById(draggedId);
+                    const dragType = e.dataTransfer.getData('type');
+                    
+                    if (draggedElement && draggedElement !== this && dragType === 'position') {
+                        swapPlayersBetweenPositions(draggedElement, this);
+                    }
+                });
+            });
+        }
+        
+        function swapPlayersBetweenPositions(pos1, pos2) {
+            const pos1Id = pos1.getAttribute('data-position');
+            const pos2Id = pos2.getAttribute('data-position');
+            
+            const player1 = teamData.positions[pos1Id];
+            const player2 = teamData.positions[pos2Id];
+            
+            teamData.positions[pos1Id] = player2;
+            teamData.positions[pos2Id] = player1;
+            
+            if (player1) {
+                pos2.innerHTML = `<div>${pos2Id}</div><small>${player1}</small>`;
+                pos2.classList.add('assigned');
+            } else {
+                pos2.innerHTML = `<div>${pos2Id}</div><small>Sin asignar</small>`;
+                pos2.classList.remove('assigned');
+            }
+            
+            if (player2) {
+                pos1.innerHTML = `<div>${pos1Id}</div><small>${player2}</small>`;
+                pos1.classList.add('assigned');
+            } else {
+                pos1.innerHTML = `<div>${pos1Id}</div><small>Sin asignar</small>`;
+                pos1.classList.remove('assigned');
+            }
+            
+            if (pos1Id === "BD" || pos2Id === "BD") {
+                if (teamData.positions["BD"]) {
+                    document.getElementById('bdBox').style.display = 'block';
+                    document.getElementById('bdPlayer').textContent = teamData.positions["BD"];
+                } else {
+                    document.getElementById('bdBox').style.display = 'none';
+                    document.getElementById('bdPlayer').textContent = 'Sin asignar';
                 }
             }
             
-            function showNotification(message) {
-                const notification = document.getElementById('notification');
-                notification.textContent = message;
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
-            }
+            updateBench();
             
-            function scrollToTop() {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            showNotification(`Jugadores intercambiados entre ${pos1Id} y ${pos2Id}`);
+        }
+        
+        function improveMobileCompatibility() {
+            const interactiveElements = document.querySelectorAll('input, select, button, .player-card, .position');
+            interactiveElements.forEach(el => {
+                el.classList.add('mobile-optimized');
+            });
+            
+            if ('ontouchstart' in window) {
+                document.body.classList.add('touch-device');
             }
-        });
+        }
+        
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>
-
