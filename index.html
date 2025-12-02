@@ -905,16 +905,6 @@
             word-break: break-word;
         }
         
-        /* Nuevos estilos para intercambio de posiciones */
-        .position-swap-info {
-            background: var(--light-gray);
-            border-left: 4px solid var(--primary-blue);
-            padding: 10px;
-            border-radius: 6px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-        }
-        
         /* Mejoras para tablas responsivas */
         .table-optimized {
             width: 100%;
@@ -942,32 +932,6 @@
         .table-optimized th:nth-child(1) { width: 15%; }
         .table-optimized th:nth-child(2) { width: 60%; }
         .table-optimized th:nth-child(3) { width: 25%; }
-        
-        /* MEJORAS IMPLEMENTADAS: Compatibilidad de imagen */
-        .image-compatibility {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none;
-        }
-        
-        .image-download-compatible {
-            display: inline-block;
-            background: var(--primary-blue);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .image-download-compatible:hover {
-            background: var(--secondary-blue);
-            transform: translateY(-2px);
-        }
         
         /* NUEVOS ESTILOS PARA SISTEMA DE CLICKS */
         .selection-mode-active .player-card {
@@ -1011,18 +975,62 @@
             font-weight: bold;
         }
         
-        .selection-info {
-            background: var(--light-gray);
-            border-left: 4px solid var(--primary-blue);
-            padding: 10px;
-            border-radius: 6px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-        }
-        
         .mobile-optimized {
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+        }
+        
+        /* NUEVO ESTILO PARA LA MODIFICACIÓN SOLICITADA */
+        .pdf-team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .pdf-team-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .pdf-team-name-box {
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .pdf-team-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .pdf-empty-lineup-table {
+            flex: 1;
+            min-width: 300px;
+            background: var(--white);
+            border: 2px solid var(--medium-gray);
+            border-radius: 6px;
+            padding: 12px;
+        }
+        
+        .pdf-empty-lineup-table h3 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .pdf-empty-table-content {
+            text-align: center;
+            color: var(--dark-gray);
+            font-style: italic;
+            padding: 20px 0;
         }
         
         @media print {
@@ -1048,6 +1056,7 @@
             .pdf-lineup { grid-template-columns: 1fr; }
             .step-indicator::before { left: 10%; right: 10%; }
             .step { width: 40px; height: 40px; margin: 0 15px; font-size: 1rem; }
+            .pdf-team-header { flex-wrap: nowrap; }
         }
         
         @media (min-width: 992px) {
@@ -1067,6 +1076,7 @@
             .player-management { flex-direction: column; }
             .quick-assign { order: -1; }
             .player-input-section { order: 1; }
+            .pdf-team-header { flex-direction: column; }
         }
         
         @media (max-width: 400px) {
@@ -1127,7 +1137,7 @@
                 <label for="category"><i class="fas fa-tag"></i> Categoría</label>
                 <select id="category">
                     <option value="">Selecciona una categoría</option>
-                    <option value="Lineup Profesional">Lineup Profesional</option>
+                    <option value="Lineup Profesional">Lineup Profesional (BD)</option>
                     <option value="Lineup Infantil">Lineup Infantil</option>
                 </select>
                 <div class="error-message" id="categoryError">Debes seleccionar una categoría</div>
@@ -1167,7 +1177,7 @@
             </div>
             
             <div class="tap-instructions">
-                <i class="fas fa-hand-pointer"></i> <strong>Instrucciones:</strong> Toca un jugador para seleccionarlo y luego toca una posición para asignarlo.
+                <i class="fas fa-hand-pointer"></i> <strong>Instrucciones:</strong> Para asignar: Haz clic en un jugador y luego en una posición. Para intercambiar: Haz clic en una posición asignada y luego en otra.
             </div>
             
             <!-- Contenedor para jugadores seleccionados -->
@@ -1190,11 +1200,7 @@
             
             <div class="player-management">
                 <div class="player-input-section">
-                    <p>Selecciona uno o varios jugadores y luego haz clic en una posición para asignarlos:</p>
-                    
-                    <div class="selection-info">
-                        <i class="fas fa-exchange-alt"></i> <strong>Intercambiar posiciones:</strong> Selecciona una posición y luego otra para intercambiar jugadores.
-                    </div>
+                    <p>Selecciona un jugador y luego haz clic en una posición para asignarlo. Para intercambiar jugadores entre posiciones, haz clic en una posición y luego en otra.</p>
                     
                     <div class="player-list" id="playerList">
                         <!-- Los jugadores aparecerán aquí -->
@@ -1246,10 +1252,6 @@
             
             <div class="tap-instructions">
                 <i class="fas fa-hand-pointer"></i> <strong>Instrucciones:</strong> Toca un jugador del banquillo para seleccionarlo y luego toca una posición en el orden de bateo para moverlo.
-            </div>
-            
-            <div class="selection-info">
-                <i class="fas fa-info-circle"></i> <strong>Instrucciones:</strong> Selecciona un jugador del banquillo y luego una posición en el orden de bateo para moverlo. También puedes intercambiar jugadores dentro del orden de bateo.
             </div>
             
             <div class="lineup-container">
@@ -1468,21 +1470,18 @@
                         selectedPosition.classList.remove('selected');
                         selectedPosition = null;
                     } else {
-                        // Selección múltiple para asignación masiva
-                        if (selectedPlayers.includes(playerName)) {
+                        // Selección individual (para asignación manual uno por uno)
+                        if (selectedPlayer === playerCard) {
                             playerCard.classList.remove('selected');
-                            selectedPlayers = selectedPlayers.filter(p => p !== playerName);
+                            selectedPlayer = null;
+                            showNotification('Selección de jugador cancelada');
                         } else {
+                            if (selectedPlayer) {
+                                selectedPlayer.classList.remove('selected');
+                            }
+                            selectedPlayer = playerCard;
                             playerCard.classList.add('selected');
-                            selectedPlayers.push(playerName);
-                        }
-                        
-                        updateSelectedPlayersList();
-                        
-                        if (selectedPlayers.length > 0) {
-                            document.getElementById('selectedPlayersContainer').style.display = 'block';
-                        } else {
-                            document.getElementById('selectedPlayersContainer').style.display = 'none';
+                            showNotification(`Jugador ${playerName} seleccionado. Ahora haz clic en una posición para asignarlo.`);
                         }
                     }
                 }
@@ -1498,29 +1497,87 @@
                         ? e.target 
                         : e.target.parentElement;
                     
-                    // Si ya hay una posición seleccionada, intercambiar jugadores
-                    if (selectedPosition && selectedPosition !== positionEl) {
-                        swapPlayersBetweenPositions(selectedPosition, positionEl);
-                        selectedPosition.classList.remove('selected');
-                        selectedPosition = null;
+                    // Si hay un jugador seleccionado, asignarlo a esta posición
+                    if (selectedPlayer) {
+                        assignPlayerToPosition(selectedPlayer, positionEl);
+                        selectedPlayer.classList.remove('selected');
+                        selectedPlayer = null;
+                    } else if (selectedPlayers.length > 0) {
+                        // Si hay jugadores seleccionados en la lista de múltiples selección
+                        assignSelectedPlayersToPosition(positionEl);
                     } else {
-                        // Limpiar selección anterior
-                        if (selectedPosition) {
+                        // Sistema de intercambio de posiciones
+                        if (selectedPosition && selectedPosition !== positionEl) {
+                            // Intercambiar jugadores entre las dos posiciones seleccionadas
+                            swapPlayersBetweenPositions(selectedPosition, positionEl);
                             selectedPosition.classList.remove('selected');
-                        }
-                        
-                        // Seleccionar nueva posición
-                        selectedPosition = positionEl;
-                        selectedPosition.classList.add('selected');
-                        
-                        if (selectedPosition.classList.contains('assigned')) {
-                            showNotification(`Posición ${positionEl.getAttribute('data-position')} seleccionada. Toca otra posición para intercambiar jugadores.`);
+                            selectedPosition = null;
                         } else {
-                            showNotification(`Posición ${positionEl.getAttribute('data-position')} seleccionada. Toca un jugador para asignarlo.`);
+                            // Limpiar selección anterior
+                            if (selectedPosition) {
+                                selectedPosition.classList.remove('selected');
+                            }
+                            
+                            // Seleccionar nueva posición
+                            selectedPosition = positionEl;
+                            selectedPosition.classList.add('selected');
+                            
+                            const positionId = positionEl.getAttribute('data-position');
+                            const currentPlayer = teamData.positions[positionId];
+                            
+                            if (currentPlayer) {
+                                showNotification(`Posición ${positionId} seleccionada (${currentPlayer}). Haz clic en otra posición para intercambiar jugadores.`);
+                            } else {
+                                showNotification(`Posición ${positionId} seleccionada. Selecciona un jugador para asignarlo.`);
+                            }
                         }
                     }
                 }
             });
+        }
+        
+        function swapPlayersBetweenPositions(pos1, pos2) {
+            const pos1Id = pos1.getAttribute('data-position');
+            const pos2Id = pos2.getAttribute('data-position');
+            
+            const player1 = teamData.positions[pos1Id];
+            const player2 = teamData.positions[pos2Id];
+            
+            // Intercambiar jugadores
+            teamData.positions[pos1Id] = player2;
+            teamData.positions[pos2Id] = player1;
+            
+            // Actualizar visualmente las posiciones
+            if (player1) {
+                pos2.innerHTML = `<div>${pos2Id}</div><small>${player1}</small>`;
+                pos2.classList.add('assigned');
+            } else {
+                pos2.innerHTML = `<div>${pos2Id}</div><small>Sin asignar</small>`;
+                pos2.classList.remove('assigned');
+            }
+            
+            if (player2) {
+                pos1.innerHTML = `<div>${pos1Id}</div><small>${player2}</small>`;
+                pos1.classList.add('assigned');
+            } else {
+                pos1.innerHTML = `<div>${pos1Id}</div><small>Sin asignar</small>`;
+                pos1.classList.remove('assigned');
+            }
+            
+            // Actualizar caja de BD si es necesario
+            if (pos1Id === "BD" || pos2Id === "BD") {
+                if (teamData.positions["BD"]) {
+                    document.getElementById('bdBox').style.display = 'block';
+                    document.getElementById('bdPlayer').textContent = teamData.positions["BD"];
+                } else {
+                    document.getElementById('bdBox').style.display = 'none';
+                    document.getElementById('bdPlayer').textContent = 'Sin asignar';
+                }
+            }
+            
+            updateBench();
+            
+            showNotification(`Jugadores intercambiados entre ${pos1Id} y ${pos2Id}`);
         }
         
         function updateSelectedPlayersList() {
@@ -2250,31 +2307,71 @@
                 `;
             }
             
+            // MODIFICACIÓN: Agregar nombre del equipo en la parte superior y tabla vacía al lado
             pdfPreview.innerHTML = `
                 <div class="pdf-header">
-                    <h1>${teamData.name}</h1>
-                    <p>Lineup Oficial - ${teamData.date}</p>
+                    <h1>LINEUP OFICIAL</h1>
+                    <p><strong>Equipo:</strong> ${teamData.name} | <strong>Fecha:</strong> ${teamData.date}</p>
+                    <p><strong>Entrenador:</strong> ${teamData.coach} | <strong>Categoría:</strong> ${teamData.category}</p>
                 </div>
                 
-                <div class="pdf-lineup">
-                    <div class="pdf-batting-order">
-                        <h3>Orden de Bateo</h3>
-                        <table class="table-optimized">
-                            <thead>
-                                <tr>
-                                    <th>Orden</th>
-                                    <th>Jugador</th>
-                                    <th>Posición</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${battingOrderHTML}
-                            </tbody>
-                        </table>
+                <div class="pdf-team-header">
+                    <div class="pdf-team-info">
+                        <div class="pdf-team-name-box">
+                            <div class="pdf-team-name">${teamData.name}</div>
+                        </div>
+                        <div class="pdf-batting-order">
+                            <h3>Orden de Bateo</h3>
+                            <table class="table-optimized">
+                                <thead>
+                                    <tr>
+                                        <th>Orden</th>
+                                        <th>Jugador</th>
+                                        <th>Posición</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${battingOrderHTML}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="pdf-empty-lineup-table">
+                        <h3>Lineup Adversario</h3>
+                        <div class="pdf-empty-table-content">
+                            <p>Tabla vacía para lineup del equipo contrario</p>
+                            <table class="table-optimized" style="margin-top: 15px;">
+                                <thead>
+                                    <tr>
+                                        <th>Orden</th>
+                                        <th>Jugador</th>
+                                        <th>Posición</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td></td><td></td></tr>
+                                    <tr><td>2</td><td></td><td></td></tr>
+                                    <tr><td>3</td><td></td><td></td></tr>
+                                    <tr><td>4</td><td></td><td></td></tr>
+                                    <tr><td>5</td><td></td><td></td></tr>
+                                    <tr><td>6</td><td></td><td></td></tr>
+                                    <tr><td>7</td><td></td><td></td></tr>
+                                    <tr><td>8</td><td></td><td></td></tr>
+                                    <tr><td>9</td><td></td><td></td></tr>
+                                    ${teamData.category === "Lineup Profesional" ? '<tr><td>P</td><td></td><td></td></tr>' : ''}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 
                 ${benchHTML}
+                
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ccc; font-size: 12px;">
+                    <p><strong>Notas:</strong> _________________________________________________________</p>
+                    <p style="margin-top: 10px;"><strong>Firma del Entrenador:</strong> _________________________</p>
+                </div>
             `;
             
             adjustTablesToContent();
@@ -2353,47 +2450,6 @@
                 console.error('Error generando PDF:', error);
                 showNotification('Error al generar el PDF. Intenta nuevamente.');
             });
-        }
-        
-        function swapPlayersBetweenPositions(pos1, pos2) {
-            const pos1Id = pos1.getAttribute('data-position');
-            const pos2Id = pos2.getAttribute('data-position');
-            
-            const player1 = teamData.positions[pos1Id];
-            const player2 = teamData.positions[pos2Id];
-            
-            teamData.positions[pos1Id] = player2;
-            teamData.positions[pos2Id] = player1;
-            
-            if (player1) {
-                pos2.innerHTML = `<div>${pos2Id}</div><small>${player1}</small>`;
-                pos2.classList.add('assigned');
-            } else {
-                pos2.innerHTML = `<div>${pos2Id}</div><small>Sin asignar</small>`;
-                pos2.classList.remove('assigned');
-            }
-            
-            if (player2) {
-                pos1.innerHTML = `<div>${pos1Id}</div><small>${player2}</small>`;
-                pos1.classList.add('assigned');
-            } else {
-                pos1.innerHTML = `<div>${pos1Id}</div><small>Sin asignar</small>`;
-                pos1.classList.remove('assigned');
-            }
-            
-            if (pos1Id === "BD" || pos2Id === "BD") {
-                if (teamData.positions["BD"]) {
-                    document.getElementById('bdBox').style.display = 'block';
-                    document.getElementById('bdPlayer').textContent = teamData.positions["BD"];
-                } else {
-                    document.getElementById('bdBox').style.display = 'none';
-                    document.getElementById('bdPlayer').textContent = 'Sin asignar';
-                }
-            }
-            
-            updateBench();
-            
-            showNotification(`Jugadores intercambiados entre ${pos1Id} y ${pos2Id}`);
         }
         
         function improveMobileCompatibility() {
