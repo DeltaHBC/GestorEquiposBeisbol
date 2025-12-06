@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor de Equipos de Béisbol</title>
+    <title>LineUpBall</title>
+    <link rel="icon" type="image/png" href="Logo1.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -58,14 +59,36 @@
             overflow: hidden;
             border: 1px solid var(--secondary-blue);
         }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo-img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
         h1, h2, h3 {
             font-family: 'Oswald', sans-serif;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
-        h1 {
+        .app-title {
             font-size: clamp(1.8rem, 4vw, 2.5rem);
             margin-bottom: 10px;
+            color: var(--white);
+        }
+        .app-title span.line {
+            color: var(--white);
+        }
+        .app-title span.up {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+        .app-title span.ball {
             color: var(--white);
         }
         header p {
@@ -603,12 +626,15 @@
             background: white;
             color: black;
             padding: 20px;
-            width: 100%;
-            max-width: 794px;
+            width: 210mm; /* Ancho A4 fijo */
+            min-height: 297mm; /* Alto A4 fijo */
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             font-size: 14px;
             line-height: 1.4;
+            box-sizing: border-box;
+            transform-origin: top left;
+            transform: scale(0.8); /* Escalado para previsualización */
         }
         
         .pdf-header {
@@ -909,17 +935,14 @@
         .table-optimized {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed;
         }
         
         .table-optimized th,
         .table-optimized td {
-            padding: 8px 6px;
+            padding: 10px 8px;
             text-align: left;
             border: 1px solid var(--medium-gray);
             word-wrap: break-word;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         
         .table-optimized th {
@@ -928,10 +951,6 @@
             font-weight: bold;
             white-space: nowrap;
         }
-        
-        .table-optimized th:nth-child(1) { width: 15%; }
-        .table-optimized th:nth-child(2) { width: 60%; }
-        .table-optimized th:nth-child(3) { width: 25%; }
         
         /* NUEVOS ESTILOS PARA SISTEMA DE CLICKS */
         .selection-mode-active .player-card {
@@ -1033,13 +1052,72 @@
             padding: 20px 0;
         }
         
+        /* Estilos para las tablas de banquillo en PDF según categoría */
+        .pdf-bench-tables {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .pdf-bench-table {
+            flex: 1;
+            min-width: 300px;
+            background: var(--light-gray);
+            padding: 12px;
+            border-radius: 6px;
+        }
+        
+        .pdf-bench-table h3 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        /* Estilos para tamaño oficial de hoja A4 */
+        .pdf-official-format {
+            width: 210mm !important;
+            min-height: 297mm !important;
+            padding: 15mm !important;
+            margin: 0 auto !important;
+            box-sizing: border-box;
+            background: white;
+            transform: none !important; /* Eliminar escalado para generación real */
+        }
+        
+        /* Mejoras de compatibilidad móvil */
+        .touch-device *:focus {
+            outline: none;
+        }
+        
+        .touch-device .btn {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        .touch-device input, 
+        .touch-device select {
+            min-height: 44px;
+            font-size: 16px; /* Previene zoom en iOS */
+        }
+        
         @media print {
             body { background: white; padding: 0; margin: 0; }
             .container { box-shadow: none; border: none; padding: 0; margin: 0; width: 100%; }
             header, .step-indicator, .btn-container, .contact-section, .floating-btn, .notification { display: none !important; }
             .step-content { display: block !important; }
             .pdf-preview-container { border: none; padding: 0; margin: 0; width: 100%; overflow: visible; }
-            .pdf-preview { box-shadow: none; border: none; padding: 0; margin: 0; width: 100%; min-height: auto; }
+            .pdf-preview { 
+                box-shadow: none; 
+                border: none; 
+                padding: 0; 
+                margin: 0; 
+                width: 210mm !important;
+                min-height: 297mm !important;
+                transform: none !important;
+                scale: 1 !important;
+            }
         }
         
         @media (min-width: 576px) {
@@ -1071,7 +1149,12 @@
             .btn { padding: 8px 16px; font-size: 0.9rem; }
             .contact-info { flex-direction: column; align-items: center; }
             .contact-item { width: 100%; max-width: 300px; justify-content: center; }
-            .pdf-preview { width: 100%; min-width: 794px; }
+            .pdf-preview { 
+                width: 210mm; 
+                min-width: 210mm;
+                transform: scale(0.6);
+                transform-origin: top left;
+            }
             .position { width: clamp(45px, 18vw, 70px); height: clamp(45px, 18vw, 70px); font-size: clamp(0.5rem, 3vw, 0.8rem); }
             .player-management { flex-direction: column; }
             .quick-assign { order: -1; }
@@ -1099,7 +1182,10 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-baseball-ball"></i> Gestor de Equipos de Béisbol</h1>
+            <h1 class="app-title">
+                <img src="Logo1.png" alt="LineUpBall Logo" class="logo-img">
+                <span class="line">Line</span><span class="up">Up</span><span class="ball">Ball</span>
+            </h1>
             <p>Diseña y organiza tu equipo de béisbol de forma profesional</p>
             <div class="header-icons">
                 <i class="fas fa-baseball-ball"></i>
@@ -1345,7 +1431,7 @@
             </div>
             
             <div class="copyright">
-                <p>&copy; 2025 Gestor de Equipos de Béisbol. Todos los derechos reservados.</p>
+                <p>&copy; 2025 LineUpBall - Gestor de Equipos de Béisbol. Todos los derechos reservados.</p>
                 <p>Un proyecto desarrollado por DeltaHBC.</p>
             </div>
         </div>
@@ -1978,7 +2064,8 @@
                     slot.setAttribute('data-slot', i);
                     
                     const playerName = teamData.battingOrder[i];
-                    const slotNumber = i < 9 ? (i + 1).toString() : (i === 9 ? "P" : (i + 1).toString());
+                    // CORRECCIÓN: Cambiado de 'i' a 'index' en la función original
+                    const slotNumber = i < 9 ? (i + 1).toString() : (i === 9 ? "10" : (i + 1).toString());
                     
                     let playerPosition = "-";
                     if (playerName) {
@@ -2248,13 +2335,14 @@
                         }
                     }
                     
-                    const slotNumber = index < 9 ? (index + 1).toString() : (index === 9 ? "P" : (index + 1).toString());
+                    // CORRECCIÓN: Usando 'index' correctamente
+                    const slotNumber = index < 9 ? (index + 1).toString() : (index === 9 ? "10" : (index + 1).toString());
                     
                     battingOrderHTML += `
                         <tr>
-                            <td>${slotNumber}</td>
-                            <td>${player || ''}</td>
-                            <td>${playerPosition}</td>
+                            <td style="width: 15%; height: 30px; vertical-align: middle;">${slotNumber}</td>
+                            <td style="width: 55%; height: 30px; vertical-align: middle;">${player || ''}</td>
+                            <td style="width: 30%; height: 30px; vertical-align: middle;">${playerPosition}</td>
                         </tr>
                     `;
                 });
@@ -2273,44 +2361,97 @@
                         
                         battingOrderHTML += `
                             <tr>
-                                <td>${battingOrderNumbers[index]}</td>
-                                <td>${player || ''}</td>
-                                <td>${playerPosition || ''}</td>
+                                <td style="width: 15%; height: 30px; vertical-align: middle;">${battingOrderNumbers[index]}</td>
+                                <td style="width: 55%; height: 30px; vertical-align: middle;">${player || ''}</td>
+                                <td style="width: 30%; height: 30px; vertical-align: middle;">${playerPosition || ''}</td>
                             </tr>
                         `;
                     }
                 });
             }
             
-            let benchHTML = '';
-            if (teamData.category === "Lineup Profesional" && teamData.benchLineup.length > 0) {
-                benchHTML = `
-                    <div class="pdf-bench">
-                        <h3>Jugadores de Reserva</h3>
-                        <table class="table-optimized">
-                            <thead>
-                                <tr>
-                                    <th>Orden</th>
-                                    <th>Jugador</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${teamData.benchLineup.map((player, index) => `
+            // MODIFICACIÓN: Generar tablas de banquillo según la categoría
+            let benchTablesHTML = '';
+            
+            if (teamData.category === "Lineup Profesional") {
+                // MODIFICACIÓN: Para profesional: 2 tablas de banquillo con 5 filas cada una
+                benchTablesHTML = `
+                    <div class="pdf-bench-tables">
+                        <div class="pdf-bench-table">
+                            <h3>Banquillo - ${teamData.name}</h3>
+                            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                                <thead>
                                     <tr>
-                                        <td>${index + 1}</td>
-                                        <td>${player}</td>
+                                        <th style="width: 20%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Orden</th>
+                                        <th style="width: 80%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Jugador</th>
                                     </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    ${Array.from({length: 5}, (_, i) => {
+                                        const player = teamData.benchLineup[i];
+                                        return `
+                                            <tr>
+                                                <td style="width: 20%; height: 35px; border: 1px solid #000; text-align: center; vertical-align: middle;">${i + 1}</td>
+                                                <td style="width: 80%; height: 35px; border: 1px solid #000; padding: 5px; vertical-align: middle;">${player || ''}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="pdf-bench-table">
+                            <h3>Banquillo - Oponente</h3>
+                            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Orden</th>
+                                        <th style="width: 80%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Jugador</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${Array.from({length: 5}, (_, i) => `
+                                        <tr>
+                                            <td style="width: 20%; height: 35px; border: 1px solid #000; text-align: center; vertical-align: middle;">${i + 1}</td>
+                                            <td style="width: 80%; height: 35px; border: 1px solid #000; padding: 5px; vertical-align: middle;"></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 `;
+                
+            } else if (teamData.category === "Lineup Infantil") {
+                // MODIFICACIÓN: Para infantil: NO mostrar tablas de banquillo
+                benchTablesHTML = '';
             }
             
-            // MODIFICACIÓN: Agregar nombre del equipo en la parte superior y tabla vacía al lado
+            // MODIFICACIÓN: Tabla adversaria con 15 posiciones para infantil
+            let adversaryTableHTML = '';
+            if (teamData.category === "Lineup Infantil") {
+                // 15 posiciones para infantil
+                adversaryTableHTML = Array.from({length: 15}, (_, i) => {
+                    const slotNumber = i < 9 ? (i + 1).toString() : (i === 9 ? "10" : (i + 1).toString());
+                    return `<tr><td style="width: 15%; height: 30px; border: 1px solid #000; text-align: center; vertical-align: middle;">${slotNumber}</td><td style="width: 55%; height: 30px; border: 1px solid #000; padding: 5px; vertical-align: middle;"></td><td style="width: 30%; height: 30px; border: 1px solid #000; padding: 5px; vertical-align: middle;"></td></tr>`;
+                }).join('');
+            } else {
+                // 10 posiciones para profesional (9 + P)
+                adversaryTableHTML = Array.from({length: 10}, (_, i) => {
+                    const slotNumber = i < 9 ? (i + 1).toString() : "P";
+                    return `<tr><td style="width: 15%; height: 30px; border: 1px solid #000; text-align: center; vertical-align: middle;">${slotNumber}</td><td style="width: 55%; height: 30px; border: 1px solid #000; padding: 5px; vertical-align: middle;"></td><td style="width: 30%; height: 30px; border: 1px solid #000; padding: 5px; vertical-align: middle;"></td></tr>`;
+                }).join('');
+            }
+            
+            // Aplicar formato A4 fijo
+            pdfPreview.className = 'pdf-official-format';
+            pdfPreview.style.width = '210mm';
+            pdfPreview.style.minHeight = '297mm';
+            pdfPreview.style.padding = '15mm';
+            
             pdfPreview.innerHTML = `
                 <div class="pdf-header">
-                    <h1>LINEUP OFICIAL</h1>
+                    <h1>LINEUP OFICIAL - ${teamData.category.toUpperCase()}</h1>
                     <p><strong>Equipo:</strong> ${teamData.name} | <strong>Fecha:</strong> ${teamData.date}</p>
                     <p><strong>Entrenador:</strong> ${teamData.coach} | <strong>Categoría:</strong> ${teamData.category}</p>
                 </div>
@@ -2322,12 +2463,12 @@
                         </div>
                         <div class="pdf-batting-order">
                             <h3>Orden de Bateo</h3>
-                            <table class="table-optimized">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
                                 <thead>
                                     <tr>
-                                        <th>Orden</th>
-                                        <th>Jugador</th>
-                                        <th>Posición</th>
+                                        <th style="width: 15%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Orden</th>
+                                        <th style="width: 55%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Jugador</th>
+                                        <th style="width: 30%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Posición</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -2341,82 +2482,29 @@
                         <h3>Lineup Adversario</h3>
                         <div class="pdf-empty-table-content">
                             <p>Tabla vacía para lineup del equipo contrario</p>
-                            <table class="table-optimized" style="margin-top: 15px;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 15px;">
                                 <thead>
                                     <tr>
-                                        <th>Orden</th>
-                                        <th>Jugador</th>
-                                        <th>Posición</th>
+                                        <th style="width: 15%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Orden</th>
+                                        <th style="width: 55%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Jugador</th>
+                                        <th style="width: 30%; height: 25px; border: 1px solid #000; background: #1a365d; color: white; text-align: center;">Posición</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>1</td><td></td><td></td></tr>
-                                    <tr><td>2</td><td></td><td></td></tr>
-                                    <tr><td>3</td><td></td><td></td></tr>
-                                    <tr><td>4</td><td></td><td></td></tr>
-                                    <tr><td>5</td><td></td><td></td></tr>
-                                    <tr><td>6</td><td></td><td></td></tr>
-                                    <tr><td>7</td><td></td><td></td></tr>
-                                    <tr><td>8</td><td></td><td></td></tr>
-                                    <tr><td>9</td><td></td><td></td></tr>
-                                    ${teamData.category === "Lineup Profesional" ? '<tr><td>P</td><td></td><td></td></tr>' : ''}
+                                    ${adversaryTableHTML}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 
-                ${benchHTML}
+                ${benchTablesHTML}
                 
                 <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ccc; font-size: 12px;">
                     <p><strong>Notas:</strong> _________________________________________________________</p>
                     <p style="margin-top: 10px;"><strong>Firma del Entrenador:</strong> _________________________</p>
                 </div>
             `;
-            
-            adjustTablesToContent();
-        }
-        
-        function adjustTablesToContent() {
-            const tables = document.querySelectorAll('.table-optimized');
-            
-            tables.forEach(table => {
-                const colWidths = [];
-                const rows = table.querySelectorAll('tr');
-                
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('th, td');
-                    cells.forEach((cell, index) => {
-                        const content = cell.textContent.trim();
-                        const contentWidth = content.length * 8;
-                        
-                        if (!colWidths[index] || contentWidth > colWidths[index]) {
-                            colWidths[index] = contentWidth;
-                        }
-                    });
-                });
-                
-                const totalWidth = colWidths.reduce((sum, width) => sum + width, 0);
-                const maxWidth = 700;
-                
-                if (totalWidth > maxWidth) {
-                    const scaleFactor = maxWidth / totalWidth;
-                    colWidths.forEach((width, index) => {
-                        colWidths[index] = Math.floor(width * scaleFactor);
-                    });
-                }
-                
-                const headerRow = table.querySelector('tr');
-                if (headerRow) {
-                    const headerCells = headerRow.querySelectorAll('th');
-                    headerCells.forEach((cell, index) => {
-                        if (colWidths[index]) {
-                            cell.style.width = `${colWidths[index]}px`;
-                            cell.style.minWidth = `${colWidths[index]}px`;
-                        }
-                    });
-                }
-            });
         }
         
         function generatePDF() {
@@ -2424,29 +2512,56 @@
             
             showNotification('Generando PDF, por favor espera...');
             
-            html2canvas(pdfPreview, {
+            // Crear un clon para la captura sin escalado
+            const clone = pdfPreview.cloneNode(true);
+            clone.className = 'pdf-official-format';
+            clone.style.width = '210mm';
+            clone.style.minHeight = '297mm';
+            clone.style.padding = '15mm';
+            clone.style.position = 'absolute';
+            clone.style.left = '-9999px';
+            clone.style.top = '0';
+            clone.style.transform = 'none';
+            document.body.appendChild(clone);
+            
+            // Configuración para html2canvas con dimensiones A4 fijas
+            const pdfWidth = 210; // mm
+            const pdfHeight = 297; // mm
+            const pxPerMm = 3.78; // píxeles por mm (a 96 DPI)
+            
+            const canvasWidth = pdfWidth * pxPerMm;
+            const canvasHeight = pdfHeight * pxPerMm;
+            
+            html2canvas(clone, {
                 scale: 2,
                 useCORS: true,
                 logging: false,
-                onclone: function(clonedDoc) {
-                    const tables = clonedDoc.querySelectorAll('table');
-                    tables.forEach(table => {
-                        table.style.width = 'auto';
-                        table.style.borderCollapse = 'collapse';
-                    });
-                }
+                backgroundColor: '#ffffff',
+                width: canvasWidth,
+                height: canvasHeight,
+                windowWidth: canvasWidth,
+                windowHeight: canvasHeight
             }).then(canvas => {
+                // Eliminar el clon
+                document.body.removeChild(clone);
+                
                 const imgData = canvas.toDataURL('image/png');
-                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                const pdf = new jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
                 
-                const imgWidth = 210;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                // Agregar imagen al PDF con dimensiones exactas
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
                 pdf.save(`${teamData.name.replace(/\s+/g, '_')}_lineup_oficial.pdf`);
                 
                 showNotification('¡PDF profesional generado exitosamente!');
             }).catch(error => {
+                // Eliminar el clon en caso de error
+                if (clone.parentNode) {
+                    document.body.removeChild(clone);
+                }
                 console.error('Error generando PDF:', error);
                 showNotification('Error al generar el PDF. Intenta nuevamente.');
             });
@@ -2458,8 +2573,34 @@
                 el.classList.add('mobile-optimized');
             });
             
-            if ('ontouchstart' in window) {
+            // Detectar si es un dispositivo táctil
+            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
                 document.body.classList.add('touch-device');
+                
+                // Mejorar la experiencia táctil
+                document.querySelectorAll('.btn, .player-card, .position, .batting-slot, .bench-slot').forEach(el => {
+                    el.style.minHeight = '44px';
+                    el.style.minWidth = '44px';
+                    el.style.touchAction = 'manipulation';
+                });
+                
+                // Prevenir zoom en inputs en iOS
+                document.querySelectorAll('input, select').forEach(el => {
+                    el.addEventListener('focus', function() {
+                        this.style.fontSize = '16px';
+                    });
+                    el.addEventListener('blur', function() {
+                        this.style.fontSize = '';
+                    });
+                });
+            }
+            
+            // Mejorar rendimiento en dispositivos móviles
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                // Optimizaciones específicas para móviles
+                document.querySelectorAll('.position').forEach(pos => {
+                    pos.style.transition = 'all 0.2s ease';
+                });
             }
         }
         
@@ -2476,7 +2617,6 @@
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        // MODIFICACIÓN:final
     </script>
 </body>
 </html>
